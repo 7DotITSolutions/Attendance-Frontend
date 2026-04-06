@@ -1,0 +1,33 @@
+.navbar {
+  height: var(--navbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: #fff;
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.navbar-title { font-size: 1.15rem; font-weight: 700; }
+.navbar-right { display: flex; align-items: center; gap: 0.75rem; }
+.navbar-role { font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.65rem; border-radius: 100px; }
+.navbar-name { font-size: 0.875rem; font-weight: 500; }
+.navbar-avatar, .navbar-avatar-img { width: 34px; height: 34px; border-radius: 50%; }
+
+.navbar-hamburger {
+  display: none;
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 1rem; }
+  .navbar-title { font-size: 1rem; }
+  .navbar-right { gap: 0.5rem; }
+  .navbar-hamburger { display: block; }
+}

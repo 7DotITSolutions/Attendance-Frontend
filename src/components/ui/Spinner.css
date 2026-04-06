@@ -1,0 +1,29 @@
+/* =============================================================
+   FILE: src/components/ui/Spinner.css
+   PURPOSE: Animated loading spinner styles.
+   ============================================================= */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid #e5e7eb;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.spinner-lg {
+  width: 42px;
+  height: 42px;
+  border-width: 3px;
+}
+.spinner-full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  width: 100%;
+}

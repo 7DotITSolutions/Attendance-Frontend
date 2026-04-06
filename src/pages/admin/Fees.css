@@ -1,0 +1,123 @@
+/* =============================================================
+   FILE: src/pages/admin/Fees.css
+   PURPOSE: Fee management page styles — summary row, student
+            fee cards with paid/partial/pending color coding.
+   ============================================================= */
+
+.fees-page { padding-bottom: 2rem; }
+
+.fees-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.fees-controls .form-select { width: auto; min-width: 160px; }
+
+/* Summary row */
+.fees-summary-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.fee-sum-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--gray-200);
+  padding: 0.875rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 90px;
+}
+.fee-sum-card.collected { border-color: #86efac; background: #f0fdf4; }
+.fee-sum-card.outstanding { border-color: #fca5a5; background: #fef2f2; }
+.fee-sum-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--gray-900);
+}
+.fee-sum-card.collected .fee-sum-val   { color: var(--success); }
+.fee-sum-card.outstanding .fee-sum-val { color: var(--danger); }
+.fee-sum-label {
+  font-size: 0.65rem;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* Student fee cards */
+.fees-list { display: flex; flex-direction: column; gap: 0.65rem; }
+
+.fee-student-card {
+  background: #fff;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  transition: border-color 0.15s;
+}
+.fee-student-card.paid    { border-color: #86efac; background: #f0fdf4; }
+.fee-student-card.partial { border-color: #fcd34d; background: #fffbeb; }
+.fee-student-card.pending { border-color: var(--gray-200); }
+
+.fee-student-left { display: flex; align-items: center; gap: 0.75rem; }
+.fee-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fee-student-name  { font-weight: 700; color: var(--gray-900); font-size: 0.92rem; }
+.fee-student-phone { font-size: 0.78rem; color: var(--gray-400); margin-top: 0.1rem; }
+.fee-advance       { font-size: 0.72rem; color: var(--success); font-weight: 600; margin-top: 0.1rem; }
+
+.fee-student-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.fee-amounts    { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.fee-amount-item { display: flex; flex-direction: column; align-items: center; }
+.fee-amount-label { font-size: 0.62rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.04em; }
+.fee-amount-val   { font-size: 0.9rem; font-weight: 700; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; }
+.fee-amount-val.paid { color: var(--success); }
+.fee-amount-val.due  { color: var(--danger); }
+.fee-receipt { font-size: 0.72rem; color: var(--gray-400); }
+
+/* Collect modal */
+.collect-info-row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.875rem;
+  background: var(--gray-50);
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.collect-label { display: block; font-size: 0.68rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.04em; }
+.collect-val   { display: block; font-size: 0.95rem; font-weight: 700; color: var(--gray-800); margin-top: 0.15rem; }
+
+@media (max-width: 640px) {
+  .fees-controls { flex-direction: column; }
+  .fees-controls .form-select, .fees-controls .btn { width: 100%; }
+  .fee-student-card { flex-direction: column; align-items: flex-start; }
+  .fee-student-right { justify-content: flex-start; width: 100%; }
+  .fees-summary-row { overflow-x: auto; flex-wrap: nowrap; }
+}

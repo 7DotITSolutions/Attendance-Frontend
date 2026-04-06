@@ -1,0 +1,288 @@
+/* =============================================================
+   FILE: src/pages/admin/Attendance.css
+   PURPOSE: Attendance marking page. Key feature: two large
+            circle buttons (P and A) per student for fast
+            thumb-friendly marking on mobile.
+   ============================================================= */
+
+.attendance-page { padding-bottom: 6rem; }
+
+/* ── Controls ──────────────────────────────────────────── */
+.att-controls { margin-bottom: 1rem; }
+.att-controls-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.att-batch-info { font-size: 0.8rem; color: var(--gray-400); }
+
+/* ── Summary bar ───────────────────────────────────────── */
+.att-summary {
+  display: flex;
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 0.875rem;
+  background: #fff;
+}
+.att-summary-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-right: 1px solid var(--gray-100);
+}
+.att-summary-item:last-child { border-right: none; }
+.att-summary-item.present { background: #f0fdf4; }
+.att-summary-item.absent  { background: #fef2f2; }
+.att-summary-item.leave   { background: #eff6ff; }
+.att-summary-item.total   { background: #f5f3ff; }
+
+.att-summary-count {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1;
+}
+.att-summary-item.present .att-summary-count { color: #059669; }
+.att-summary-item.absent  .att-summary-count { color: #dc2626; }
+.att-summary-item.leave   .att-summary-count { color: #2563eb; }
+.att-summary-item.total   .att-summary-count { color: #7c3aed; }
+
+.att-summary-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+
+/* ── Bulk actions ──────────────────────────────────────── */
+.att-bulk-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.875rem;
+  flex-wrap: wrap;
+}
+.att-bulk-btn {
+  flex: 1;
+  min-width: 100px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.55rem 0.75rem;
+  border: 2px solid;
+  transition: all 0.15s;
+}
+.att-bulk-btn.present-btn { background: #f0fdf4; color: #059669; border-color: #86efac; }
+.att-bulk-btn.present-btn:hover { background: #059669; color: #fff; }
+.att-bulk-btn.absent-btn  { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+.att-bulk-btn.absent-btn:hover  { background: #dc2626; color: #fff; }
+.att-bulk-btn.reset-btn   { background: var(--gray-50); color: var(--gray-600); border-color: var(--gray-300); }
+.att-bulk-btn.reset-btn:hover   { background: var(--gray-200); }
+
+/* ── Student list ──────────────────────────────────────── */
+.att-student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ── Student card ──────────────────────────────────────── */
+.att-student-card {
+  background: #fff;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.18s, background 0.18s;
+  gap: 0.75rem;
+}
+
+/* Card background changes when status is set */
+.att-student-card.present {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+.att-student-card.absent {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+.att-student-card.leave {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+/* Serial + name */
+.att-student-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+.att-serial {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.att-student-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.att-student-sub {
+  font-size: 0.72rem;
+  color: var(--gray-400);
+  margin-top: 0.1rem;
+}
+
+/* ── Circle buttons — THE MAIN FEATURE ─────────────────── */
+.att-circles {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.att-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2.5px solid;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Present circle — green */
+.att-circle.present-circle {
+  background: #fff;
+  border-color: #86efac;
+  color: #86efac;
+}
+.att-circle.present-circle:hover {
+  background: #f0fdf4;
+  border-color: #059669;
+  color: #059669;
+  transform: scale(1.08);
+}
+.att-circle.present-circle.selected {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(5,150,105,0.35);
+  transform: scale(1.08);
+}
+
+/* Absent circle — red */
+.att-circle.absent-circle {
+  background: #fff;
+  border-color: #fca5a5;
+  color: #fca5a5;
+}
+.att-circle.absent-circle:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #dc2626;
+  transform: scale(1.08);
+}
+.att-circle.absent-circle.selected {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(220,38,38,0.35);
+  transform: scale(1.08);
+}
+
+/* Leave circle — smaller, blue */
+.att-circle.leave-circle {
+  width: 36px;
+  height: 36px;
+  font-size: 0.78rem;
+  background: #fff;
+  border-color: #bfdbfe;
+  color: #bfdbfe;
+}
+.att-circle.leave-circle:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: scale(1.08);
+}
+.att-circle.leave-circle.selected {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  transform: scale(1.08);
+}
+
+/* ── Sticky save bar ───────────────────────────────────── */
+.att-save-bar {
+  position: fixed;
+  bottom: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  background: #fff;
+  border-top: 1px solid var(--gray-200);
+  padding: 0.875rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  z-index: 50;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+}
+.att-save-info {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+.att-save-btn { min-width: 200px; }
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .att-save-bar { left: 0; padding: 0.75rem 1rem; }
+  .att-save-btn { min-width: 0; flex: 1; }
+
+  .att-circle { width: 52px; height: 52px; font-size: 1rem; }
+  .att-circle.leave-circle { width: 40px; height: 40px; }
+
+  .att-student-card { padding: 0.65rem 0.875rem; }
+  .att-student-name { font-size: 0.9rem; }
+
+  .att-controls-row { flex-direction: column; }
+  .att-controls-row .form-select,
+  .att-controls-row .form-input { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .att-circle { width: 56px; height: 56px; font-size: 1.05rem; }
+  .att-circle.leave-circle { width: 44px; height: 44px; }
+  .att-circles { gap: 0.4rem; }
+}

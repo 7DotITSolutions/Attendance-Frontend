@@ -1,0 +1,75 @@
+/* =============================================================
+   FILE: src/pages/admin/Batches.css
+   PURPOSE: Batch card grid and day pill styles.
+   ============================================================= */
+
+.batches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.batch-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  transition: box-shadow 0.18s;
+}
+.batch-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+.batch-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.batch-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+.batch-timing { font-size: 0.78rem; color: #9ca3af; margin-top: 0.2rem; }
+
+.batch-days { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.day-pill {
+  padding: 0.18rem 0.5rem;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+}
+.day-pill.active { background: #ede9fe; color: #7c3aed; border-color: #c4b5fd; }
+
+.batch-meta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.batch-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
+.batch-meta-label { font-size: 0.68rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.04em; }
+.batch-meta-val   { font-size: 0.875rem; font-weight: 600; color: #374151; }
+
+.batch-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; }
+
+/* Day selector in modal */
+.day-selector { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.day-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 100px;
+  border: 1.5px solid #e5e7eb;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.day-btn:hover    { border-color: #c4b5fd; color: #7c3aed; }
+.day-btn.selected { background: #ede9fe; border-color: #7c3aed; color: #7c3aed; }
+
+@media (max-width: 640px) {
+  .batches-grid { grid-template-columns: 1fr; }
+}

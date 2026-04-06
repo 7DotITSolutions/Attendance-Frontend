@@ -1,0 +1,59 @@
+/* =============================================================
+   FILE: src/pages/coach/BatchStudents.css
+   PURPOSE: Coach batch student list — mobile-optimized cards.
+   ============================================================= */
+
+.bs-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.bs-actions .btn { flex: 1; min-width: 160px; justify-content: center; }
+
+.bs-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.bs-card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.bs-card-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+
+.bs-serial {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--gray-500);
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bs-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bs-name { font-weight: 700; color: var(--gray-900); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bs-sub  { font-size: 0.72rem; color: var(--gray-400); margin-top: 0.1rem; }
+.bs-fee  { font-size: 0.72rem; color: var(--primary); font-weight: 600; margin-top: 0.1rem; }

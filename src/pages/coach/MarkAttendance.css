@@ -1,0 +1,11 @@
+/* =============================================================
+   FILE: src/pages/coach/MarkAttendance.css
+   PURPOSE: Coach attendance page — imports admin Attendance.css
+            for shared circle button styles, this file has
+            coach-specific overrides only.
+   ============================================================= */
+
+/* Coach sees a teal accent instead of purple for variety */
+.coach-att .att-circle.present-circle.selected {
+  box-shadow: 0 4px 12px rgba(5,150,105,0.4);
+}

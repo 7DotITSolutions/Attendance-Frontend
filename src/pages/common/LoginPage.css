@@ -1,0 +1,146 @@
+/* =============================================================
+   FILE: src/pages/common/LoginPage.css
+   PURPOSE: Shared styles for all auth pages: Login, Register,
+            OTP, ForgotPassword, VerifyCoachEmail.
+            Import this CSS in each auth page component.
+   ============================================================= */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f3ff 0%, #e0f2fe 100%);
+  padding: 1rem;
+}
+
+.auth-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.auth-brand { text-align: center; margin-bottom: 1.75rem; }
+.auth-logo  { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+.auth-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  margin-bottom: 0.25rem;
+}
+
+.auth-subtitle { font-size: 0.875rem; color: #6b7280; }
+
+.auth-form { display: flex; flex-direction: column; gap: 0; }
+
+/* Password with show/hide */
+.input-with-icon { position: relative; display: flex; align-items: center; }
+.input-with-icon .form-input { padding-right: 2.75rem; }
+.input-icon-btn {
+  position: absolute;
+  right: 0.65rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+/* Links row */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.auth-link {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #7c3aed;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.auth-link:hover { color: #5b21b6; }
+
+/* Role selector for register */
+.role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+.role-option {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: left;
+  background: #fafafa;
+}
+.role-option:hover   { border-color: #c4b5fd; }
+.role-option.selected {
+  border-color: #7c3aed;
+  background: #f5f3ff;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+}
+.role-option-icon  { font-size: 1.4rem; margin-bottom: 0.35rem; display: block; }
+.role-option-label { font-size: 0.875rem; font-weight: 600; color: #1f2937; display: block; }
+.role-option-desc  { font-size: 0.72rem; color: #9ca3af; margin-top: 0.15rem; display: block; line-height: 1.4; }
+
+/* OTP input */
+.otp-input {
+  font-size: 1.5rem !important;
+  text-align: center !important;
+  letter-spacing: 0.4em !important;
+  padding: 0.75rem !important;
+}
+
+/* Info box */
+.auth-info-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: #166534;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+.auth-info-email {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Section label above role */
+.auth-section-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+@media (max-width: 400px) {
+  .auth-card { padding: 1.5rem 1.25rem; border-radius: 16px; }
+  .role-grid { grid-template-columns: 1fr; }
+}

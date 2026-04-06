@@ -1,0 +1,42 @@
+/* =============================================================
+   FILE: src/pages/admin/Students.css
+   PURPOSE: Students list page — table on desktop, cards on mobile.
+   ============================================================= */
+
+.students-filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.students-table-wrap { display: block; }
+.students-mobile-list { display: none; }
+
+.student-mobile-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--gray-200);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-bottom: 0.65rem;
+  transition: box-shadow 0.15s;
+}
+.student-mobile-card:hover { box-shadow: var(--shadow-md); }
+.student-mobile-left  { display: flex; align-items: center; gap: 0.75rem; }
+.student-mobile-name  { font-weight: 600; color: var(--gray-900); font-size: 0.9rem; }
+.student-mobile-sub   { font-size: 0.76rem; color: var(--gray-500); margin-top: 0.1rem; }
+
+@media (max-width: 768px) {
+  .students-table-wrap  { display: none; }
+  .students-mobile-list { display: block; }
+  .students-filters     { flex-direction: column; align-items: stretch; }
+  .students-filters .search-wrap,
+  .students-filters .form-select { width: 100%; }
+  .students-filters .search-wrap input { width: 100%; }
+}

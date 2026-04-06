@@ -1,0 +1,35 @@
+/* =============================================================
+   FILE: src/pages/admin/Dashboard.css
+   PURPOSE: Admin dashboard layout styles.
+   ============================================================= */
+
+.dashboard { animation: fadeIn 0.3s ease; }
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.dash-outstanding { text-align: center; padding: 1.5rem 0 1rem; }
+.dash-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--danger);
+}
+.dash-amount-label { font-size: 0.78rem; color: var(--gray-400); margin-top: 0.25rem; }
+
+.dash-fee-row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--gray-100);
+  margin-top: 0.5rem;
+}
+.dash-fee-label { display: block; font-size: 0.68rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.04em; }
+.dash-fee-val   { display: block; font-size: 1rem; font-weight: 700; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 0.1rem; }
+
+@media (max-width: 768px) {
+  .dashboard-charts { grid-template-columns: 1fr; }
+}

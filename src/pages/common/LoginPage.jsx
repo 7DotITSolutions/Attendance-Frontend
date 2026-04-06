@@ -77,8 +77,8 @@ const LoginPage = () => {
       <div className="auth-card">
         <div className="auth-brand">
           <div className="auth-logo">📋</div>
-          <h1 className="auth-title">AttendancePro</h1>
-          <p className="auth-subtitle">Sign in to your account</p>
+          <h1 className="auth-title">Tick</h1>
+          <p className="auth-subtitle">LogIn in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="auth-form">
@@ -150,7 +150,7 @@ const LoginPage = () => {
                 {" "}Signing in...
               </>
             ) : (
-              "Sign in →"
+              "Log In →"
             )}
           </button>
 
@@ -161,7 +161,7 @@ const LoginPage = () => {
               className="auth-link"
               onClick={() => navigate("/register")}
             >
-              Create admin account
+              Create account
             </button>
 
             <button

@@ -58,11 +58,25 @@
   padding: 0.25rem;
   line-height: 1;
 }
+.forgot-pass {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+.forgot-pass-link {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #7c3aed;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
 
 /* Links row */
 .auth-links {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 1rem;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -74,8 +88,8 @@
   color: #7c3aed;
   cursor: pointer;
   padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration: none;
+  text-underline-offset: none;
 }
 .auth-link:hover { color: #5b21b6; }
 

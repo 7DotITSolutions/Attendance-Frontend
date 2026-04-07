@@ -22,7 +22,7 @@ const PAGE_TITLES = {
   "/coach/fees":       "Collect Fees",
 };
 
-const Navbar = ({ onToggleSidebar }) => {
+const Navbar = () => {
   const { user, previewUrl } = useAuth();
   const { pathname } = useLocation();
 
@@ -36,7 +36,6 @@ const Navbar = ({ onToggleSidebar }) => {
 
   return (
     <nav className="navbar">
-      <button className="navbar-hamburger" onClick={onToggleSidebar}>&#9776;</button>
       <h1 className="navbar-title">{title}</h1>
       <div className="navbar-right">
         <span className="navbar-role">{roleLabel}</span>

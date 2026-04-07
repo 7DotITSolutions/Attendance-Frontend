@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./LoginPage.css";
 
 const LoginPage = () => {
@@ -57,7 +58,6 @@ const LoginPage = () => {
       }
 
       throw new Error("Login failed");
-
     } catch (err) {
       console.error("LOGIN ERROR:", err);
       toast.error(err.message || "Invalid email or password");
@@ -75,8 +75,11 @@ const LoginPage = () => {
           <p className="auth-subtitle">Log in to your account</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="auth-form">
-          
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          className="auth-form"
+        >
           {/* Email */}
           <div className="form-group">
             <label className="form-label">Email address</label>
@@ -120,7 +123,7 @@ const LoginPage = () => {
                 className="input-icon-btn"
                 onClick={() => setShowPass(!showPass)}
               >
-                {showPass ? "🙈" : "👁️"}
+                {showPass ? <FiEye /> : <FiEyeOff />}
               </button>
             </div>
 
@@ -128,7 +131,7 @@ const LoginPage = () => {
             <div className="forgot-pass">
               <button
                 type="button"
-                className="auth-link"
+                className="forgot-pass-link"
                 onClick={() => navigate("/forgot-password")}
               >
                 Forgot password?
@@ -162,10 +165,9 @@ const LoginPage = () => {
               className="auth-link"
               onClick={() => navigate("/register")}
             >
-              Still nor registered? Create an account →
+              Still not registered? Create an account →
             </button>
           </div>
-
         </form>
       </div>
     </div>

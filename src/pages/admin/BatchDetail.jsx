@@ -177,8 +177,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Modal   from "../../components/ui/Modal";
-import Badge   from "../../components/ui/Badge";
+import Modal from "../../components/ui/Modal";
+import Badge from "../../components/ui/Badge";
 import Spinner from "../../components/ui/Spinner";
 import "./BatchDetail.css";
 
@@ -189,17 +189,24 @@ const BatchDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [batch,    setBatch]    = useState(null);
+  const [batch, setBatch] = useState(null);
   const [students, setStudents] = useState([]);
-  const [loading,  setLoading]  = useState(true);
-  const [modal,    setModal]    = useState(false);
-  const [saving,   setSaving]   = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const load = async () => {
     try {
-      const res = await axios.get(`${BASE}/admin/batch/${id}`, { headers: h() });
+      const res = await axios.get(`${BASE}/admin/batch/${id}`, {
+        headers: h(),
+      });
       setBatch(res.data.batch);
       setStudents(res.data.students || []);
     } catch {
@@ -210,12 +217,21 @@ const BatchDetail = () => {
     }
   };
 
-  useEffect(() => { load(); }, [id]);
+  useEffect(() => {
+    load();
+  }, [id]);
 
   const openEnroll = () => {
     reset({
-      name: "", fatherName: "", phone: "", aadharNumber: "",
-      motherName: "", schoolName: "", address: "", DOB: "", monthlyFee: "",
+      name: "",
+      fatherName: "",
+      phone: "",
+      aadharNumber: "",
+      motherName: "",
+      schoolName: "",
+      address: "",
+      DOB: "",
+      monthlyFee: "",
     });
     setModal(true);
   };
@@ -226,7 +242,7 @@ const BatchDetail = () => {
       const res = await axios.post(
         `${BASE}/admin/student/create`,
         { ...data, batchId: id },
-        { headers: h() }
+        { headers: h() },
       );
       toast.success("Student enrolled successfully!");
       // Show info if student is in another batch too
@@ -244,16 +260,18 @@ const BatchDetail = () => {
   };
 
   if (loading) return <Spinner full />;
-  if (!batch)  return null;
+  if (!batch) return null;
 
   return (
     <div>
       {/* Header */}
       <div className="page-header">
         <div>
-          <button className="btn btn-ghost btn-sm"
+          <button
+            className="btn btn-ghost btn-sm"
             onClick={() => navigate("/admin/batches")}
-            style={{ marginBottom: "0.5rem" }}>
+            style={{ marginBottom: "0.5rem" }}
+          >
             ← Back
           </button>
           <h1 className="page-title">{batch.batchName}</h1>
@@ -262,12 +280,16 @@ const BatchDetail = () => {
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          <button className="btn btn-outline"
-            onClick={() => navigate(`/admin/attendance?batchId=${id}`)}>
+          <button
+            className="btn btn-outline"
+            onClick={() => navigate(`/admin/attendance?batchId=${id}`)}
+          >
             📋 Attendance
           </button>
-          <button className="btn btn-outline"
-            onClick={() => navigate(`/admin/fees?batchId=${id}`)}>
+          <button
+            className="btn btn-outline"
+            onClick={() => navigate(`/admin/fees?batchId=${id}`)}
+          >
             💰 Fees
           </button>
           <button className="btn btn-primary" onClick={openEnroll}>
@@ -278,31 +300,44 @@ const BatchDetail = () => {
 
       {/* Batch info cards */}
       <div className="bd-info-grid">
-        <div className="card"><div className="card-body bd-info-item">
-          <span className="bd-info-label">Fee</span>
-          <span className="bd-info-val">₹{(batch.fee || 0).toLocaleString("en-IN")}/month</span>
-        </div></div>
-        <div className="card"><div className="card-body bd-info-item">
-          <span className="bd-info-label">Students</span>
-          <span className="bd-info-val">{students.length} enrolled</span>
-        </div></div>
-        <div className="card"><div className="card-body bd-info-item">
-          <span className="bd-info-label">Status</span>
-          <Badge status={batch.status} />
-        </div></div>
-        <div className="card"><div className="card-body bd-info-item">
-          <span className="bd-info-label">Days</span>
-          <span className="bd-info-val bd-days">
-            {(batch.weekDays || []).map((d) => d.slice(0, 3)).join(", ") || "Not set"}
-          </span>
-        </div></div>
+        <div className="card">
+          <div className="card-body bd-info-item">
+            <span className="bd-info-label">Fee</span>
+            <span className="bd-info-val">
+              ₹{(batch.fee || 0).toLocaleString("en-IN")}/month
+            </span>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-body bd-info-item">
+            <span className="bd-info-label">Students</span>
+            <span className="bd-info-val">{students.length} enrolled</span>
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-body bd-info-item">
+            <span className="bd-info-label">Status</span>
+            <Badge status={batch.status} />
+          </div>
+        </div>
+        <div className="card">
+          <div className="card-body bd-info-item">
+            <span className="bd-info-label">Days</span>
+            <span className="bd-info-val bd-days">
+              {(batch.weekDays || []).map((d) => d.slice(0, 3)).join(", ") ||
+                "Not set"}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Students table */}
       <div className="card" style={{ marginTop: "1.5rem" }}>
         <div className="card-header">
           <h3 className="card-title">Enrolled Students</h3>
-          <button className="btn btn-primary btn-sm" onClick={openEnroll}>+ Enroll</button>
+          <button className="btn btn-primary btn-sm" onClick={openEnroll}>
+            + Enroll
+          </button>
         </div>
         <div className="table-wrap">
           <table className="table">
@@ -320,25 +355,41 @@ const BatchDetail = () => {
             <tbody>
               {students.map((s) => (
                 <tr key={s._id}>
-                  <td><strong>{s.name}</strong></td>
+                  <td>
+                    <strong>{s.name}</strong>
+                  </td>
                   <td style={{ fontSize: "0.82rem" }}>{s.fatherName}</td>
                   <td style={{ fontSize: "0.82rem" }}>{s.phone}</td>
-                  <td style={{ fontSize: "0.82rem", fontFamily: "monospace", color: "var(--gray-500)" }}>
-  {(() => {
-    const a = s.aadharNumber?.toString().trim();
+                  <td
+                    style={{
+                      fontSize: "0.82rem",
+                      fontFamily: "monospace",
+                      color: "var(--gray-500)",
+                    }}
+                  >
+                    {(() => {
+                      const a = s.aadharNumber?.toString().trim();
 
-    if (!a || !/^\d{12}$/.test(a)) {
-      return <span style={{ color: "var(--danger)" }}>Not set</span>;
-    }
+                      if (!a || !/^\d{12}$/.test(a)) {
+                        return (
+                          <span style={{ color: "var(--danger)" }}>
+                            Not set
+                          </span>
+                        );
+                      }
 
-    return `XXXX-XXXX-${a.slice(-4)}`;
-  })()}
-</td>
+                      return `XXXX-XXXX-${a.slice(-4)}`;
+                    })()}
+                  </td>
                   <td>₹{(s.monthlyFee || 0).toLocaleString("en-IN")}</td>
-                  <td><Badge status={s.status} /></td>
                   <td>
-                    <button className="btn btn-ghost btn-sm"
-                      onClick={() => navigate(`/admin/students/${s._id}`)}>
+                    <Badge status={s.status} />
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => navigate(`/admin/students/${s._id}`)}
+                    >
                       View →
                     </button>
                   </td>
@@ -360,15 +411,28 @@ const BatchDetail = () => {
       {/* Enroll Modal */}
       <Modal
         open={modal}
-        onClose={() => { setModal(false); reset(); }}
+        onClose={() => {
+          setModal(false);
+          reset();
+        }}
         title="Enroll New Student"
         size="lg"
         footer={
           <>
-            <button className="btn btn-outline" onClick={() => { setModal(false); reset(); }}>
+            <button
+              className="btn btn-outline"
+              onClick={() => {
+                setModal(false);
+                reset();
+              }}
+            >
               Cancel
             </button>
-            <button className="btn btn-primary" disabled={saving} onClick={handleSubmit(enroll)}>
+            <button
+              className="btn btn-primary"
+              disabled={saving}
+              onClick={handleSubmit(enroll)}
+            >
               {saving ? "Enrolling..." : "Enroll Student"}
             </button>
           </>
@@ -376,28 +440,44 @@ const BatchDetail = () => {
       >
         <div className="form-row">
           <div className="form-group">
-            <label className="form-label">Student name <span className="req">*</span></label>
-            <input className={`form-input ${errors.name ? "error" : ""}`}
+            <label className="form-label">
+              Student name <span className="req">*</span>
+            </label>
+            <input
+              className={`form-input ${errors.name ? "error" : ""}`}
               placeholder="Full name"
-              {...register("name", { required: "Required" })} />
+              {...register("name", { required: "Required" })}
+            />
             {errors.name && <p className="form-error">{errors.name.message}</p>}
           </div>
           <div className="form-group">
-            <label className="form-label">Father name <span className="req">*</span></label>
-            <input className={`form-input ${errors.fatherName ? "error" : ""}`}
+            <label className="form-label">
+              Father name <span className="req">*</span>
+            </label>
+            <input
+              className={`form-input ${errors.fatherName ? "error" : ""}`}
               placeholder="Father's name"
-              {...register("fatherName", { required: "Required" })} />
-            {errors.fatherName && <p className="form-error">{errors.fatherName.message}</p>}
+              {...register("fatherName", { required: "Required" })}
+            />
+            {errors.fatherName && (
+              <p className="form-error">{errors.fatherName.message}</p>
+            )}
           </div>
         </div>
 
         <div className="form-row">
           <div className="form-group">
-            <label className="form-label">Phone <span className="req">*</span></label>
-            <input className={`form-input ${errors.phone ? "error" : ""}`}
+            <label className="form-label">
+              Phone <span className="req">*</span>
+            </label>
+            <input
+              className={`form-input ${errors.phone ? "error" : ""}`}
               placeholder="10-digit number"
-              {...register("phone", { required: "Required" })} />
-            {errors.phone && <p className="form-error">{errors.phone.message}</p>}
+              {...register("phone", { required: "Required" })}
+            />
+            {errors.phone && (
+              <p className="form-error">{errors.phone.message}</p>
+            )}
           </div>
           <div className="form-group">
             <label className="form-label">
@@ -411,21 +491,26 @@ const BatchDetail = () => {
               {...register("aadharNumber", {
                 required: "Aadhaar number is required",
                 pattern: {
-                  value:   /^\d{12}$/,
+                  value: /^\d{12}$/,
                   message: "Must be exactly 12 digits",
                 },
               })}
             />
-            {errors.aadharNumber && <p className="form-error">{errors.aadharNumber.message}</p>}
+            {errors.aadharNumber && (
+              <p className="form-error">{errors.aadharNumber.message}</p>
+            )}
           </div>
         </div>
 
         <div className="form-row">
           <div className="form-group">
             <label className="form-label">Monthly fee (₹)</label>
-            <input type="number" className="form-input"
+            <input
+              type="number"
+              className="form-input"
               placeholder={batch.fee || 0}
-              {...register("monthlyFee")} />
+              {...register("monthlyFee")}
+            />
           </div>
           <div className="form-group">
             <label className="form-label">Date of birth</label>
@@ -436,20 +521,30 @@ const BatchDetail = () => {
         <div className="form-row">
           <div className="form-group">
             <label className="form-label">Mother name</label>
-            <input className="form-input" placeholder="Mother's name (optional)"
-              {...register("motherName")} />
+            <input
+              className="form-input"
+              placeholder="Mother's name (optional)"
+              {...register("motherName")}
+            />
           </div>
           <div className="form-group">
             <label className="form-label">School name</label>
-            <input className="form-input" placeholder="School (optional)"
-              {...register("schoolName")} />
+            <input
+              className="form-input"
+              placeholder="School (optional)"
+              {...register("schoolName")}
+            />
           </div>
         </div>
 
         <div className="form-group">
           <label className="form-label">Address</label>
-          <textarea className="form-textarea" rows={2} placeholder="Home address (optional)"
-            {...register("address")} />
+          <textarea
+            className="form-textarea"
+            rows={2}
+            placeholder="Home address (optional)"
+            {...register("address")}
+          />
         </div>
       </Modal>
     </div>

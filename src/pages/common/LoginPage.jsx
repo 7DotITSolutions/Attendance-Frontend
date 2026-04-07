@@ -22,7 +22,6 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm();
 
-  // 🔥 Keep this for auto redirect if already logged in
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.role === "coach") {
@@ -33,25 +32,21 @@ const LoginPage = () => {
     }
   }, [isAuthenticated, user, navigate]);
 
-  // 🔥 FIXED LOGIN HANDLER
   const onSubmit = async ({ email, password }) => {
     setLoading(true);
 
     try {
       const result = await unifiedLogin(email, password);
 
-      // Coach first login → OTP flow
       if (result?.requiresEmailVerification) {
         toast.info("OTP sent to your email.");
         navigate("/verify-coach-email");
         return;
       }
 
-      // Normal login success
       if (result?.success) {
         toast.success("Welcome back!");
 
-        // 🔥 IMMEDIATE REDIRECT (fixes infinite loading issue)
         if (result.role === "coach") {
           navigate("/coach-dashboard");
         } else {
@@ -61,7 +56,6 @@ const LoginPage = () => {
         return;
       }
 
-      // Fallback safety
       throw new Error("Login failed");
 
     } catch (err) {
@@ -78,10 +72,11 @@ const LoginPage = () => {
         <div className="auth-brand">
           <div className="auth-logo">📋</div>
           <h1 className="auth-title">Tick</h1>
-          <p className="auth-subtitle">LogIn in to your account</p>
+          <p className="auth-subtitle">Log in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="auth-form">
+          
           {/* Email */}
           <div className="form-group">
             <label className="form-label">Email address</label>
@@ -129,6 +124,17 @@ const LoginPage = () => {
               </button>
             </div>
 
+            {/* Forgot password BELOW input */}
+            <div className="forgot-pass">
+              <button
+                type="button"
+                className="auth-link"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot password?
+              </button>
+            </div>
+
             {errors.password && (
               <p className="form-error">{errors.password.message}</p>
             )}
@@ -139,39 +145,27 @@ const LoginPage = () => {
             type="submit"
             disabled={loading}
             className="btn btn-primary btn-full btn-lg"
-            style={{ marginTop: "0.5rem" }}
           >
             {loading ? (
               <>
-                <span
-                  className="spinner"
-                  style={{ width: 16, height: 16, borderWidth: 2 }}
-                />
-                {" "}Signing in...
+                <span className="spinner" /> Signing in...
               </>
             ) : (
               "Log In →"
             )}
           </button>
 
-          {/* Links */}
+          {/* Only Create Account at bottom */}
           <div className="auth-links">
             <button
               type="button"
               className="auth-link"
               onClick={() => navigate("/register")}
             >
-              Create account
-            </button>
-
-            <button
-              type="button"
-              className="auth-link"
-              onClick={() => navigate("/forgot-password")}
-            >
-              Forgot password?
+              Still nor registered? Create an account →
             </button>
           </div>
+
         </form>
       </div>
     </div>

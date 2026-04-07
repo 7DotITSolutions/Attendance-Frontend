@@ -77,30 +77,77 @@ const StudentDetail = () => {
 
       {/* Profile info */}
       <div className="sd-info-grid">
-        <div className="card"><div className="card-body">
-          <p className="sd-label">Father</p><p className="sd-val">{student.fatherName}</p>
-        </div></div>
-        <div className="card"><div className="card-body">
-          <p className="sd-label">Mother</p><p className="sd-val">{student.motherName || "—"}</p>
-        </div></div>
-        <div className="card"><div className="card-body">
-          <p className="sd-label">School</p><p className="sd-val">{student.schoolName || "—"}</p>
-        </div></div>
-        <div className="card"><div className="card-body">
-          <p className="sd-label">Monthly Fee</p>
-          <p className="sd-val">₹{(student.monthlyFee || 0).toLocaleString("en-IN")}</p>
-        </div></div>
-        <div className="card"><div className="card-body">
-          <p className="sd-label">Advance Balance</p>
-          <p className="sd-val" style={{ color: student.advanceBalance > 0 ? "var(--success)" : "inherit" }}>
-            ₹{(student.advanceBalance || 0).toLocaleString("en-IN")}
-          </p>
-        </div></div>
-        <div className="card"><div className="card-body">
-          <p className="sd-label">Enrolled</p>
-          <p className="sd-val">{new Date(student.enrollDate).toLocaleDateString("en-IN")}</p>
-        </div></div>
-      </div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Father</p>
+    <p className="sd-val">{student.fatherName}</p>
+  </div></div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Mother</p>
+    <p className="sd-val">{student.motherName || "—"}</p>
+  </div></div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Phone</p>
+    <p className="sd-val">{student.phone}</p>
+  </div></div>
+
+  {/* ✅ Aadhaar */}
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Aadhaar</p>
+    <p className="sd-val" style={{ fontFamily: "monospace" }}>
+      {student.aadharNumber
+        ? `XXXX-XXXX-${student.aadharNumber.slice(-4)}`
+        : "—"}
+    </p>
+  </div></div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">School</p>
+    <p className="sd-val">{student.schoolName || "—"}</p>
+  </div></div>
+
+  {/* ✅ DOB */}
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Date of Birth</p>
+    <p className="sd-val">
+      {student.DOB
+        ? new Date(student.DOB).toLocaleDateString("en-IN")
+        : "—"}
+    </p>
+  </div></div>
+
+  {/* ✅ Address (full width) */}
+  <div className="card" style={{ gridColumn: "1 / -1" }}>
+    <div className="card-body">
+      <p className="sd-label">Address</p>
+      <p className="sd-val">{student.address || "—"}</p>
+    </div>
+  </div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Monthly Fee</p>
+    <p className="sd-val">
+      ₹{(student.monthlyFee || 0).toLocaleString("en-IN")}
+    </p>
+  </div></div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Advance Balance</p>
+    <p className="sd-val" style={{ color: student.advanceBalance > 0 ? "var(--success)" : "inherit" }}>
+      ₹{(student.advanceBalance || 0).toLocaleString("en-IN")}
+    </p>
+  </div></div>
+
+  <div className="card"><div className="card-body">
+    <p className="sd-label">Enrolled</p>
+    <p className="sd-val">
+      {new Date(student.enrollDate).toLocaleDateString("en-IN")}
+    </p>
+  </div></div>
+
+</div>
 
       {/* Tabs */}
       <div className="sd-tabs">

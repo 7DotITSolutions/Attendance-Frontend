@@ -1,17 +1,16 @@
 // =============================================================
 // FILE: src/pages/coach/BatchStudents.jsx
 // PURPOSE: Coach views and manages students in their batch.
-//          Add / Edit / Delete students directly.
-//          Bulk import from Excel using xlsx library.
-//          All API calls use /coach/* endpoints (coach-scoped).
+//          Aadhaar number now required in add/edit form.
+//          Excel template updated to include aadharNumber column.
 // =============================================================
 
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate }       from "react-router-dom";
+import axios  from "axios";
 import * as XLSX from "xlsx";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { useForm }  from "react-hook-form";
+import { toast }    from "react-toastify";
 import Modal   from "../../components/ui/Modal";
 import Badge   from "../../components/ui/Badge";
 import Spinner from "../../components/ui/Spinner";
@@ -21,28 +20,24 @@ const BASE = import.meta.env.VITE_BASE_URL;
 const h = () => ({ Authorization: `Bearer ${localStorage.getItem("token")}` });
 
 const BatchStudents = () => {
-  const { batchId } = useParams();
-  const navigate    = useNavigate();
+  const { batchId }  = useParams();
+  const navigate     = useNavigate();
   const fileInputRef = useRef(null);
 
-  const [batch,      setBatch]      = useState(null);
-  const [students,   setStudents]   = useState([]);
-  const [loading,    setLoading]    = useState(true);
-  const [search,     setSearch]     = useState("");
-
-  // Add / Edit modal
-  const [modal,      setModal]      = useState(false);
-  const [editStudent,setEditStudent]= useState(null);
-  const [saving,     setSaving]     = useState(false);
-
-  // Bulk import
-  const [bulkModal,  setBulkModal]  = useState(false);
-  const [bulkRows,   setBulkRows]   = useState([]);
-  const [bulkSaving, setBulkSaving] = useState(false);
+  const [batch,       setBatch]       = useState(null);
+  const [students,    setStudents]    = useState([]);
+  const [loading,     setLoading]     = useState(true);
+  const [search,      setSearch]      = useState("");
+  const [modal,       setModal]       = useState(false);
+  const [editStudent, setEditStudent] = useState(null);
+  const [saving,      setSaving]      = useState(false);
+  const [bulkModal,   setBulkModal]   = useState(false);
+  const [bulkRows,    setBulkRows]    = useState([]);
+  const [bulkSaving,  setBulkSaving]  = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  // ── Load batch + students ─────────────────────────────
+  // ── Load students ─────────────────────────────────────
   const load = () => {
     setLoading(true);
     axios
@@ -60,50 +55,53 @@ const BatchStudents = () => {
 
   useEffect(() => { load(); }, [batchId]);
 
-  // ── Open add modal ────────────────────────────────────
+  // ── Open add ──────────────────────────────────────────
   const openAdd = () => {
     setEditStudent(null);
     reset({
-      name: "", fatherName: "", phone: "",
+      name: "", fatherName: "", phone: "", aadharNumber: "",
       motherName: "", schoolName: "", address: "", DOB: "", monthlyFee: "",
     });
     setModal(true);
   };
 
-  // ── Open edit modal ───────────────────────────────────
+  // ── Open edit ─────────────────────────────────────────
   const openEdit = (s) => {
     setEditStudent(s);
     reset({
-      name:        s.name,
-      fatherName:  s.fatherName,
-      motherName:  s.motherName  || "",
-      phone:       s.phone,
-      schoolName:  s.schoolName  || "",
-      address:     s.address     || "",
-      DOB:         s.DOB         || "",
-      monthlyFee:  s.monthlyFee  || "",
+      name:         s.name,
+      fatherName:   s.fatherName,
+      motherName:   s.motherName   || "",
+      phone:        s.phone,
+      aadharNumber: s.aadharNumber || "",
+      schoolName:   s.schoolName   || "",
+      address:      s.address      || "",
+      DOB:          s.DOB          || "",
+      monthlyFee:   s.monthlyFee   || "",
     });
     setModal(true);
   };
 
-  // ── Save (add or edit) ────────────────────────────────
+  // ── Save ──────────────────────────────────────────────
   const onSubmit = async (data) => {
     setSaving(true);
     try {
+      let res;
       if (editStudent) {
-        await axios.put(
+        res = await axios.put(
           `${BASE}/coach/student/${editStudent._id}`,
           data,
           { headers: h() }
         );
         toast.success("Student updated");
       } else {
-        await axios.post(
+        res = await axios.post(
           `${BASE}/coach/batch/${batchId}/students`,
           data,
           { headers: h() }
         );
         toast.success("Student enrolled");
+        if (res.data.info) toast.info(res.data.info, { autoClose: 5000 });
       }
       setModal(false);
       load();
@@ -114,7 +112,7 @@ const BatchStudents = () => {
     }
   };
 
-  // ── Delete student ────────────────────────────────────
+  // ── Delete ────────────────────────────────────────────
   const deleteStudent = async (id, name) => {
     if (!window.confirm(`Delete ${name}? This cannot be undone.`)) return;
     try {
@@ -130,34 +128,29 @@ const BatchStudents = () => {
   const handleExcelFile = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
         const wb   = XLSX.read(evt.target.result, { type: "binary" });
         const ws   = wb.Sheets[wb.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(ws);
+        if (!rows.length) { toast.warning("Excel file is empty"); return; }
 
-        if (!rows.length) {
-          toast.warning("Excel file is empty");
-          return;
-        }
-
-        // Normalize headers — handle case variations
         const normalized = rows.map((row) => {
-          const lower = {};
+          const lk = {};
           Object.keys(row).forEach((k) => {
-            lower[k.toLowerCase().replace(/\s+/g, "")] = row[k];
+            lk[k.toLowerCase().replace(/\s+/g, "")] = row[k];
           });
           return {
-            name:        lower["name"]        || lower["studentname"] || "",
-            fatherName:  lower["fathername"]  || lower["father"]      || "",
-            motherName:  lower["mothername"]  || lower["mother"]      || "",
-            phone:       lower["phone"]?.toString() || lower["mobile"]?.toString() || "",
-            schoolName:  lower["schoolname"]  || lower["school"]      || "",
-            address:     lower["address"]     || "",
-            DOB:         lower["dob"]         || lower["dateofbirth"] || "",
-            monthlyFee:  lower["monthlyfee"]  || lower["fee"]         || "",
+            name:         lk["name"]         || lk["studentname"] || "",
+            fatherName:   lk["fathername"]   || lk["father"]      || "",
+            motherName:   lk["mothername"]   || lk["mother"]      || "",
+            phone:        lk["phone"]?.toString()        || lk["mobile"]?.toString() || "",
+            aadharNumber: lk["aadharnumber"]?.toString() || lk["aadhar"]?.toString() || "",
+            schoolName:   lk["schoolname"]   || lk["school"]      || "",
+            address:      lk["address"]      || "",
+            DOB:          lk["dob"]          || lk["dateofbirth"] || "",
+            monthlyFee:   lk["monthlyfee"]   || lk["fee"]         || "",
           };
         });
 
@@ -168,12 +161,10 @@ const BatchStudents = () => {
       }
     };
     reader.readAsBinaryString(file);
-    // Reset file input so same file can be re-selected
     e.target.value = "";
   };
 
   const confirmBulkImport = async () => {
-    if (!bulkRows.length) return;
     setBulkSaving(true);
     try {
       const res = await axios.post(
@@ -184,6 +175,7 @@ const BatchStudents = () => {
       toast.success(res.data.message);
       if (res.data.skippedReasons?.length) {
         console.log("Skipped:", res.data.skippedReasons);
+        toast.warning(`${res.data.skipped} skipped — check console for details`);
       }
       setBulkModal(false);
       setBulkRows([]);
@@ -199,14 +191,15 @@ const BatchStudents = () => {
   const downloadTemplate = () => {
     const template = [
       {
-        name: "John Doe",
-        fatherName: "James Doe",
-        motherName: "Jane Doe",
-        phone: "9876543210",
-        schoolName: "ABC School",
-        address: "123 Main St",
-        DOB: "2010-05-15",
-        monthlyFee: "1000",
+        name:         "John Doe",
+        fatherName:   "James Doe",
+        motherName:   "Jane Doe",
+        phone:        "9876543210",
+        aadharNumber: "123456789012",   // ← 12 digits required
+        schoolName:   "ABC School",
+        address:      "123 Main St",
+        DOB:          "2010-05-15",
+        monthlyFee:   "1000",
       },
     ];
     const ws = XLSX.utils.json_to_sheet(template);
@@ -219,8 +212,9 @@ const BatchStudents = () => {
 
   const filtered = students.filter(
     (s) =>
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.phone.includes(search) ||
+      s.name.toLowerCase().includes(search.toLowerCase())        ||
+      s.phone.includes(search)                                   ||
+      (s.aadharNumber || "").includes(search)                    ||
       s.fatherName.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -229,11 +223,9 @@ const BatchStudents = () => {
       {/* Header */}
       <div className="page-header">
         <div>
-          <button
-            className="btn btn-ghost btn-sm"
+          <button className="btn btn-ghost btn-sm"
             onClick={() => navigate("/coach-dashboard")}
-            style={{ marginBottom: "0.5rem" }}
-          >
+            style={{ marginBottom: "0.5rem" }}>
             ← Dashboard
           </button>
           <h1 className="page-title">{batch?.batchName}</h1>
@@ -242,41 +234,25 @@ const BatchStudents = () => {
           </p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          <button className="btn btn-outline btn-sm" onClick={downloadTemplate}>
-            ⬇ Template
-          </button>
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={() => fileInputRef.current?.click()}
-          >
+          <button className="btn btn-outline btn-sm" onClick={downloadTemplate}>⬇ Template</button>
+          <button className="btn btn-secondary btn-sm"
+            onClick={() => fileInputRef.current?.click()}>
             📊 Import Excel
           </button>
-          <button className="btn btn-primary btn-sm" onClick={openAdd}>
-            + Add Student
-          </button>
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".xlsx,.xls,.csv"
-            style={{ display: "none" }}
-            onChange={handleExcelFile}
-          />
+          <button className="btn btn-primary btn-sm" onClick={openAdd}>+ Add Student</button>
+          <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv"
+            style={{ display: "none" }} onChange={handleExcelFile} />
         </div>
       </div>
 
-      {/* Quick action buttons */}
+      {/* Quick actions */}
       <div className="bs-actions">
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate(`/coach/attendance?batchId=${batchId}`)}
-        >
+        <button className="btn btn-primary"
+          onClick={() => navigate(`/coach/attendance?batchId=${batchId}`)}>
           📋 Mark Attendance
         </button>
-        <button
-          className="btn btn-secondary"
-          onClick={() => navigate(`/coach/fees?batchId=${batchId}`)}
-        >
+        <button className="btn btn-secondary"
+          onClick={() => navigate(`/coach/fees?batchId=${batchId}`)}>
           💰 Collect Fees
         </button>
       </div>
@@ -285,16 +261,11 @@ const BatchStudents = () => {
       <div className="search-wrap" style={{ marginBottom: "1rem", width: "100%" }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" strokeWidth="2">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input
-          className="form-input search-input"
-          style={{ width: "100%" }}
-          placeholder="Search by name, phone or father name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <input className="form-input search-input" style={{ width: "100%" }}
+          placeholder="Search by name, phone, Aadhaar or father name..."
+          value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
       {/* Student list */}
@@ -307,6 +278,11 @@ const BatchStudents = () => {
               <div>
                 <div className="bs-name">{s.name}</div>
                 <div className="bs-sub">S/o {s.fatherName} · {s.phone}</div>
+                <div className="bs-sub" style={{ fontFamily: "monospace", fontSize: "0.7rem" }}>
+                  {s.aadharNumber
+                    ? `Aadhaar: XXXX-XXXX-${s.aadharNumber.slice(-4)}`
+                    : <span style={{ color: "var(--danger)" }}>⚠ No Aadhaar</span>}
+                </div>
                 <div className="bs-fee">
                   ₹{(s.monthlyFee || 0).toLocaleString("en-IN")}/month
                   {s.advanceBalance > 0 && (
@@ -320,12 +296,9 @@ const BatchStudents = () => {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.4rem" }}>
               <Badge status={s.status} />
               <div style={{ display: "flex", gap: "0.35rem" }}>
-                <button className="btn btn-outline btn-sm" onClick={() => openEdit(s)}>
-                  Edit
-                </button>
-                <button className="btn btn-danger btn-sm" onClick={() => deleteStudent(s._id, s.name)}>
-                  Delete
-                </button>
+                <button className="btn btn-outline btn-sm" onClick={() => openEdit(s)}>Edit</button>
+                <button className="btn btn-danger btn-sm"
+                  onClick={() => deleteStudent(s._id, s.name)}>Delete</button>
               </div>
             </div>
           </div>
@@ -340,10 +313,8 @@ const BatchStudents = () => {
         )}
       </div>
 
-      {/* Add / Edit Student Modal */}
-      <Modal
-        open={modal}
-        onClose={() => setModal(false)}
+      {/* Add / Edit Modal */}
+      <Modal open={modal} onClose={() => setModal(false)}
         title={editStudent ? `Edit — ${editStudent.name}` : "Enroll New Student"}
         size="lg"
         footer={
@@ -366,7 +337,7 @@ const BatchStudents = () => {
           <div className="form-group">
             <label className="form-label">Father name <span className="req">*</span></label>
             <input className={`form-input ${errors.fatherName ? "error" : ""}`}
-              placeholder="Father's full name"
+              placeholder="Father's name"
               {...register("fatherName", { required: "Father name is required" })} />
             {errors.fatherName && <p className="form-error">{errors.fatherName.message}</p>}
           </div>
@@ -381,9 +352,18 @@ const BatchStudents = () => {
             {errors.phone && <p className="form-error">{errors.phone.message}</p>}
           </div>
           <div className="form-group">
-            <label className="form-label">Mother name</label>
-            <input className="form-input" placeholder="Mother's name (optional)"
-              {...register("motherName")} />
+            <label className="form-label">Aadhaar number <span className="req">*</span></label>
+            <input
+              className={`form-input ${errors.aadharNumber ? "error" : ""}`}
+              placeholder="12-digit Aadhaar"
+              maxLength={12}
+              inputMode="numeric"
+              {...register("aadharNumber", {
+                required: "Aadhaar number is required",
+                pattern: { value: /^\d{12}$/, message: "Must be exactly 12 digits" },
+              })}
+            />
+            {errors.aadharNumber && <p className="form-error">{errors.aadharNumber.message}</p>}
           </div>
         </div>
 
@@ -391,8 +371,7 @@ const BatchStudents = () => {
           <div className="form-group">
             <label className="form-label">Monthly fee (₹)</label>
             <input type="number" className="form-input"
-              placeholder={batch?.fee || "0"}
-              {...register("monthlyFee")} />
+              placeholder={batch?.fee || "0"} {...register("monthlyFee")} />
           </div>
           <div className="form-group">
             <label className="form-label">Date of birth</label>
@@ -402,24 +381,20 @@ const BatchStudents = () => {
 
         <div className="form-group">
           <label className="form-label">School name</label>
-          <input className="form-input" placeholder="School name (optional)"
+          <input className="form-input" placeholder="School (optional)"
             {...register("schoolName")} />
         </div>
 
         <div className="form-group">
           <label className="form-label">Address</label>
           <textarea className="form-textarea" rows={2}
-            placeholder="Home address (optional)"
-            {...register("address")} />
+            placeholder="Home address (optional)" {...register("address")} />
         </div>
       </Modal>
 
       {/* Bulk Import Preview Modal */}
-      <Modal
-        open={bulkModal}
-        onClose={() => { setBulkModal(false); setBulkRows([]); }}
-        title={`Import ${bulkRows.length} Students`}
-        size="lg"
+      <Modal open={bulkModal} onClose={() => { setBulkModal(false); setBulkRows([]); }}
+        title={`Preview — ${bulkRows.length} Students`} size="lg"
         footer={
           <>
             <button className="btn btn-outline"
@@ -433,26 +408,26 @@ const BatchStudents = () => {
           </>
         }
       >
-        <p style={{ fontSize: "0.82rem", color: "var(--gray-500)", marginBottom: "1rem" }}>
-          Review the students below before importing. Students with duplicate phone numbers in this batch will be skipped automatically.
+        <p style={{ fontSize: "0.82rem", color: "var(--gray-500)", marginBottom: "0.75rem" }}>
+          Students missing Aadhaar or with duplicate Aadhaar in this batch will be skipped automatically.
         </p>
         <div style={{ maxHeight: "320px", overflowY: "auto" }}>
           <table className="table">
             <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Father</th>
-                <th>Phone</th>
-                <th>Fee</th>
-              </tr>
+              <tr><th>#</th><th>Name</th><th>Aadhaar</th><th>Phone</th><th>Fee</th></tr>
             </thead>
             <tbody>
               {bulkRows.map((r, i) => (
                 <tr key={i}>
                   <td style={{ color: "var(--gray-400)", fontSize: "0.8rem" }}>{i + 1}</td>
                   <td>{r.name || <span style={{ color: "var(--danger)" }}>Missing</span>}</td>
-                  <td style={{ fontSize: "0.82rem" }}>{r.fatherName || "—"}</td>
+                  <td style={{ fontSize: "0.8rem", fontFamily: "monospace" }}>
+                    {r.aadharNumber
+                      ? (/^\d{12}$/.test(r.aadharNumber)
+                          ? `XXXX-XXXX-${r.aadharNumber.slice(-4)}`
+                          : <span style={{ color: "var(--danger)" }}>Invalid ({r.aadharNumber})</span>)
+                      : <span style={{ color: "var(--danger)" }}>Missing</span>}
+                  </td>
                   <td style={{ fontSize: "0.82rem" }}>
                     {r.phone || <span style={{ color: "var(--danger)" }}>Missing</span>}
                   </td>

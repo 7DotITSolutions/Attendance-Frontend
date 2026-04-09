@@ -1,7 +1,7 @@
 /* =============================================================
    FILE: src/components/layouts/Sidebar.css
-   PURPOSE: Left navigation sidebar styles. Dark theme with
-            purple accent for active links.
+   PURPOSE: Sidebar styles including mobile hamburger,
+            WhatsApp reminder button and modal.
    ============================================================= */
 
 .sidebar {
@@ -35,7 +35,20 @@
 
 /* ── Nav section ─────────────────────────────────────────── */
 .sb-section        { padding: 0.75rem 0.65rem 0.35rem; }
-.sb-section-label  { font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 0.5rem; margin-bottom: 0.3rem; }
+.sb-section-label  {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.sb-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 0.35rem 0 0.5rem;
+}
 
 /* ── Nav links ───────────────────────────────────────────── */
 .sb-link {
@@ -49,17 +62,47 @@
   font-weight: 500;
   transition: all 0.15s;
   margin-bottom: 0.08rem;
+  text-decoration: none;
 }
 .sb-link:hover  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
 .sb-link.active { background: rgba(124,58,237,0.35);  color: #fff; }
 .sb-link.active svg { color: #a78bfa; }
 
-/* ── Divider ─────────────────────────────────────────────── */
-.sb-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0.35rem 0.75rem; }
+/* ── WhatsApp reminder button ────────────────────────────── */
+.sb-wa-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(37,211,102,0.3);
+  background: rgba(37,211,102,0.1);
+  color: #25d366;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+  margin-bottom: 0.35rem;
+}
+.sb-wa-btn:hover {
+  background: rgba(37,211,102,0.2);
+  border-color: rgba(37,211,102,0.5);
+}
+.sb-wa-badge {
+  margin-left: auto;
+  font-size: 0.6rem;
+  background: #25d366;
+  color: #fff;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
 
 /* ── Bottom section ──────────────────────────────────────── */
 .sb-bottom {
-  margin-top: auto;
   padding: 0.75rem;
   border-top: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
@@ -71,16 +114,13 @@
   padding: 0.5rem 0.5rem 0.6rem;
 }
 .sb-avatar {
-  width: 32px;
-  height: 32px;
+  width: 32px; height: 32px;
   border-radius: 50%;
   background: rgba(124,58,237,0.4);
   color: #c4b5fd;
   font-weight: 700;
   font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 .sb-user-name { font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.2; }
@@ -98,6 +138,150 @@
   color: rgba(255,255,255,0.38);
   font-size: 0.82rem;
   font-weight: 500;
+  cursor: pointer;
   transition: all 0.15s;
+  font-family: inherit;
 }
 .sb-logout:hover { background: rgba(220,38,38,0.15); color: #fca5a5; }
+
+/* ── Mobile hamburger ────────────────────────────────────── */
+.sb-hamburger {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 200;
+  background: #1e1b4b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 40px; height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .sb-hamburger { display: flex; }
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    width: 240px;
+    height: 100vh;
+    z-index: 150;
+    transition: left 0.25s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  }
+  .sidebar.open { left: 0; }
+}
+
+/* ── WhatsApp Modal ──────────────────────────────────────── */
+.wa-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.wa-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  animation: slideUp 0.2s ease;
+  overflow: hidden;
+}
+@keyframes slideUp { from { transform: translateY(16px); opacity:0; } to { transform:none; opacity:1; } }
+
+.wa-modal-header {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+}
+.wa-modal-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #166534;
+}
+.wa-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem;
+  border-radius: 6px;
+  line-height: 1;
+}
+.wa-close:hover { background: #f3f4f6; color: #374151; }
+
+.wa-modal-body { padding: 1.25rem; }
+
+.wa-desc {
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+.wa-features {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.wa-features li {
+  font-size: 0.82rem;
+  color: #6b7280;
+  padding: 0.2rem 0;
+}
+
+.wa-note {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 0.65rem 0.875rem;
+  font-size: 0.78rem;
+  color: #92400e;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.wa-modal-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.wa-send-btn {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+}
+.wa-send-btn:hover:not(:disabled) {
+  background: #1da851;
+  box-shadow: 0 4px 12px rgba(37,211,102,0.35);
+}
+.wa-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -157,7 +157,7 @@ const Fees = () => {
                 <span className="fee-sum-val">{summary.pending || 0}</span>
                 <span className="fee-sum-label">Pending</span>
               </div>
-              <FeeChart paid={summary.paid} partial={summary.partial} pending={summary.pending} title="" />
+              {/* <FeeChart paid={summary.paid} partial={summary.partial} pending={summary.pending} title="" /> */}
             </div>
           )}
 
@@ -209,9 +209,9 @@ const Fees = () => {
                         💵 Collect
                       </button>
                     )}
-                    {fee?.receiptNo && (
+                    {/* {fee?.receiptNo && (
                       <div className="fee-receipt">🧾 {fee.receiptNo}</div>
-                    )}
+                    )} */}
                   </div>
                 </div>
               );

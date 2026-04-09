@@ -1,13 +1,5 @@
 // =============================================================
 // FILE: src/pages/admin/Reports.jsx
-// PURPOSE: Admin reports page. Three tabs: Attendance report,
-//          Fee collection report, Defaulters list.
-//          Export to Excel using xlsx library.
-//          Filter by batch and month. Mobile-friendly table.
-// =============================================================
-
-// =============================================================
-// FILE: src/pages/admin/Reports.jsx
 // =============================================================
 
 import { useState, useEffect } from "react";
@@ -20,8 +12,10 @@ import "./Reports.css";
 const BASE = import.meta.env.VITE_BASE_URL;
 const h = () => ({ Authorization: `Bearer ${localStorage.getItem("token")}` });
 
-const MONTHS = ["January","February","March","April","May","June",
-                "July","August","September","October","November","December"];
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
 
 const currentMonth = `${MONTHS[new Date().getMonth()]} ${new Date().getFullYear()}`;
 
@@ -32,6 +26,9 @@ const Reports = () => {
   const [loading, setLoading] = useState(false);
   const [batchId, setBatchId] = useState("");
   const [month, setMonth] = useState(currentMonth);
+
+  const [remindingId, setRemindingId] = useState(null);
+  const [remindingAll, setRemindingAll] = useState(false);
 
   useEffect(() => {
     axios.get(`${BASE}/admin/batch`, { headers: h() })
@@ -95,6 +92,42 @@ const Reports = () => {
     }
   };
 
+  const remindStudent = async (studentId, name) => {
+    if (!window.confirm(`Send reminder to ${name}?`)) return;
+
+    setRemindingId(studentId);
+    try {
+      await axios.post(
+        `${BASE}/whatsapp/fee-reminder-single`,
+        { studentId, month },
+        { headers: h() }
+      );
+      toast.success(`Reminder sent to ${name}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send reminder");
+    } finally {
+      setRemindingId(null);
+    }
+  };
+
+  const remindAll = async () => {
+    if (!window.confirm(`Send reminder to all defaulters for ${month}?`)) return;
+
+    setRemindingAll(true);
+    try {
+      const res = await axios.post(
+        `${BASE}/whatsapp/fee-reminder`,
+        { batchId, month },
+        { headers: h() }
+      );
+      toast.success(res.data.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send reminders");
+    } finally {
+      setRemindingAll(false);
+    }
+  };
+
   const yearOptions = [new Date().getFullYear(), new Date().getFullYear() - 1];
 
   return (
@@ -109,7 +142,6 @@ const Reports = () => {
         </button>
       </div>
 
-      {/* Tabs */}
       <div className="report-tabs">
         {[["attendance","📋 Attendance"],["fees","💰 Fee Collection"],["defaulters","⚠ Defaulters"]].map(([key, label]) => (
           <button key={key} className={`report-tab ${tab === key ? "active" : ""}`} onClick={() => setTab(key)}>
@@ -118,7 +150,6 @@ const Reports = () => {
         ))}
       </div>
 
-      {/* Filters */}
       <div className="report-filters">
         <select className="form-select" value={month} onChange={(e) => setMonth(e.target.value)}>
           {yearOptions.map((y) =>
@@ -130,16 +161,14 @@ const Reports = () => {
           )}
         </select>
 
-        {true && (
-          <select className="form-select" value={batchId} onChange={(e) => setBatchId(e.target.value)}>
-            <option value="">All Batches</option>
-            {batches.map((b) => (
-              <option key={b._id} value={b._id}>
-                {b.batchName}
-              </option>
-            ))}
-          </select>
-        )}
+        <select className="form-select" value={batchId} onChange={(e) => setBatchId(e.target.value)}>
+          <option value="">All Batches</option>
+          {batches.map((b) => (
+            <option key={b._id} value={b._id}>
+              {b.batchName}
+            </option>
+          ))}
+        </select>
       </div>
 
       {loading ? <Spinner full /> : (
@@ -164,29 +193,11 @@ const Reports = () => {
                         </div>
                       </td>
                       <td><span className="badge badge-info">{r.batchName}</span></td>
-                      <td><span className="badge badge-success">{r.present ?? 0}</span></td>
-                      <td><span className="badge badge-danger">{r.absent ?? 0}</span></td>
-                      <td><span className="badge badge-info">{r.leave ?? 0}</span></td>
+                      <td>{r.present ?? 0}</td>
+                      <td>{r.absent ?? 0}</td>
+                      <td>{r.leave ?? 0}</td>
                       <td>{r.total ?? 0}</td>
-                      <td>
-                        <div className="att-pct-bar">
-                          <div
-                            className="att-pct-fill"
-                            style={{
-                              width: `${r.percentage ?? 0}%`,
-                              background:
-                                (r.percentage ?? 0) >= 75
-                                  ? "var(--success)"
-                                  : (r.percentage ?? 0) >= 50
-                                  ? "var(--warning)"
-                                  : "var(--danger)"
-                            }}
-                          />
-                          <span className="att-pct-text">
-                            {r.percentage ?? 0}%
-                          </span>
-                        </div>
-                      </td>
+                      <td>{r.percentage ?? 0}%</td>
                     </tr>
                   ))}
                 </tbody>
@@ -204,25 +215,13 @@ const Reports = () => {
                 <tbody>
                   {data.map((r) => (
                     <tr key={r.batchId}>
-                      <td>
-                        <strong>{r.batchName}</strong>
-                        <div style={{ fontSize: "0.75rem", color: "var(--gray-400)" }}>
-                          {r.timing}
-                        </div>
-                      </td>
+                      <td>{r.batchName}</td>
                       <td>{r.students ?? 0}</td>
-
-                      <td style={{ color: "var(--success)", fontWeight: 700 }}>
-                        ₹{(r.collected ?? 0).toLocaleString("en-IN")}
-                      </td>
-
-                      <td style={{ color: "var(--danger)", fontWeight: 700 }}>
-                        ₹{(r.outstanding ?? 0).toLocaleString("en-IN")}
-                      </td>
-
-                      <td><span className="badge badge-success">{r.paid ?? 0}</span></td>
-                      <td><span className="badge badge-warning">{r.partial ?? 0}</span></td>
-                      <td><span className="badge badge-danger">{r.pending ?? 0}</span></td>
+                      <td>₹{(r.collected ?? 0).toLocaleString("en-IN")}</td>
+                      <td>₹{(r.outstanding ?? 0).toLocaleString("en-IN")}</td>
+                      <td>{r.paid ?? 0}</td>
+                      <td>{r.partial ?? 0}</td>
+                      <td>{r.pending ?? 0}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -231,27 +230,49 @@ const Reports = () => {
 
             {/* Defaulters */}
             {tab === "defaulters" && (
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Student</th><th>Father</th><th>Phone</th><th>Batch</th><th>Due</th><th>Paid</th><th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((r) => (
-                    <tr key={r.studentId}>
-                      <td><strong>{r.name}</strong></td>
-                      <td>{r.fatherName}</td>
-                      <td>{r.phone}</td>
-                      <td><span className="badge badge-info">{r.batchName}</span></td>
+              <>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
+                  <h3>Defaulters List</h3>
+                  <button
+                    className="btn btn-wa"
+                    onClick={remindAll}
+                    disabled={remindingAll || !data.length}
+                  >
+                    {remindingAll ? "Sending..." : `📱 Remind All (${data.length})`}
+                  </button>
+                </div>
 
-                      <td>₹{(r.monthlyFee ?? 0).toLocaleString("en-IN")}</td>
-                      <td>₹{(r.paidAmount ?? 0).toLocaleString("en-IN")}</td>
-                      <td>₹{(r.outstanding ?? 0).toLocaleString("en-IN")}</td>
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Student</th><th>Father</th><th>Phone</th><th>Batch</th>
+                      <th>Due</th><th>Paid</th><th>Balance</th><th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {data.map((r) => (
+                      <tr key={r.studentId}>
+                        <td>{r.name}</td>
+                        <td>{r.fatherName}</td>
+                        <td>{r.phone}</td>
+                        <td>{r.batchName}</td>
+                        <td>₹{(r.monthlyFee ?? 0).toLocaleString("en-IN")}</td>
+                        <td>₹{(r.paidAmount ?? 0).toLocaleString("en-IN")}</td>
+                        <td>₹{(r.outstanding ?? 0).toLocaleString("en-IN")}</td>
+                        <td>
+                          <button
+                            className="btn btn-wa btn-sm"
+                            onClick={() => remindStudent(r.studentId, r.name)}
+                            disabled={remindingId === r.studentId || !r.phone}
+                          >
+                            {remindingId === r.studentId ? "Sending..." : "📱 Remind"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
             )}
 
           </div>

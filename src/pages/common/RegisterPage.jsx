@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./LoginPage.css";
 
 const ROLES = [
@@ -59,9 +60,9 @@ const RegisterPage = () => {
             {ROLES.map((r) => (
               <div key={r.value} className={`role-option ${role === r.value ? "selected" : ""}`}
                 onClick={() => setRole(r.value)}>
-                <span className="role-option-icon">{r.icon}</span>
+                {/* <span className="role-option-icon">{r.icon}</span> */}
                 <span className="role-option-label">{r.label}</span>
-                <span className="role-option-desc">{r.desc}</span>
+                {/* <span className="role-option-desc">{r.desc}</span> */}
               </div>
             ))}
           </div>
@@ -96,7 +97,7 @@ const RegisterPage = () => {
                   minLength: { value: 8, message: "Minimum 8 characters" }
                 })} />
               <button type="button" className="input-icon-btn" onClick={() => setShowPass(!showPass)}>
-                {showPass ? "🙈" : "👁️"}
+                {showPass ? <FiEye /> : <FiEyeOff />}
               </button>
             </div>
             {errors.password && <p className="form-error">{errors.password.message}</p>}

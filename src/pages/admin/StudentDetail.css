@@ -1,85 +1,35 @@
 /* =============================================================
-   FILE: src/pages/admin/StudentDetail.css
-   PURPOSE: Student detail profile, attendance, fee tabs.
+   FILE: src/pages/admin/Students.css
+   PURPOSE: Table on desktop, mobile cards on small screens.
    ============================================================= */
 
-.sd-info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-.sd-label { font-size: 0.68rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
-.sd-val   { font-size: 0.95rem; font-weight: 600; color: var(--gray-800); }
+.students-filters { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+.students-table-wrap { display: block; }
+.students-mobile-list { display: none; }
 
-/* Tabs */
-.sd-tabs  { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid var(--gray-100); padding-bottom: 0; }
-.sd-tab {
-  padding: 0.65rem 1.25rem;
-  border: none;
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--gray-500);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: all 0.15s;
-}
-.sd-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
-.sd-tab:hover  { color: var(--gray-700); }
-
-.sd-month-row  { margin-bottom: 1rem; }
-
-.sd-attendance-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 1rem;
-  align-items: start;
-}
-
-.sd-attendance-list {
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid var(--gray-200);
-  overflow: hidden;
-  max-height: 420px;
-  overflow-y: auto;
-}
-.sd-att-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--gray-100);
-}
-.sd-att-row:last-child { border-bottom: none; }
-.sd-att-date  { font-size: 0.82rem; color: var(--gray-600); font-weight: 500; min-width: 100px; }
-.sd-att-badge { padding: 0.18rem 0.65rem; border-radius: 100px; font-size: 0.72rem; font-weight: 600; text-transform: capitalize; }
-.sd-att-remark { font-size: 0.75rem; color: var(--gray-400); }
-
-/* Fee list */
-.sd-fee-list { display: flex; flex-direction: column; gap: 0.75rem; }
-.sd-fee-card {
+.student-mobile-card {
   background: #fff;
   border-radius: 12px;
   border: 1px solid var(--gray-200);
-  padding: 1rem 1.25rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+  transition: box-shadow 0.15s;
 }
-.sd-fee-top     { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
-.sd-fee-month   { font-weight: 700; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; }
-.sd-fee-receipt { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.15rem; }
-.sd-fee-amounts { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.sd-fee-label   { display: block; font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.04em; }
-.sd-fee-val     { display: block; font-size: 0.95rem; font-weight: 700; color: var(--gray-800); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 0.1rem; }
-.sd-fee-remark  { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.5rem; font-style: italic; }
+.student-mobile-card:hover  { box-shadow: var(--shadow-md); }
+.student-mobile-left  { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+.student-mobile-name  { font-weight: 600; color: var(--gray-900); font-size: 0.875rem; }
+.student-mobile-sub   { font-size: 0.73rem; color: var(--gray-500); margin-top: 0.1rem; }
 
 @media (max-width: 768px) {
-  .sd-info-grid { grid-template-columns: 1fr 1fr; }
-  .sd-attendance-layout { grid-template-columns: 1fr; }
-  .sd-fee-amounts { gap: 1rem; }
-}
-@media (max-width: 480px) {
-  .sd-info-grid { grid-template-columns: 1fr 1fr; }
-  .sd-tab { padding: 0.55rem 0.875rem; font-size: 0.82rem; }
+  .students-table-wrap  { display: none; }
+  .students-mobile-list { display: block; }
+  .students-filters     { flex-direction: column; align-items: stretch; }
+  .students-filters .search-wrap { width: 100%; }
+  .students-filters .search-wrap input { width: 100%; }
+  .students-filters .form-select { width: 100%; }
 }

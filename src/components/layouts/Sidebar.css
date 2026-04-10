@@ -168,7 +168,7 @@
   .sidebar {
     position: fixed;
     left: -100%;
-    top: 0;
+    padding-top: 3rem;
     width: 240px;
     height: 100vh;
     z-index: 150;

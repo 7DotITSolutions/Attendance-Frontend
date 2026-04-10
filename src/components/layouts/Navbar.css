@@ -1,60 +1,91 @@
 /* =============================================================
    FILE: src/components/layouts/Navbar.css
-   PURPOSE: Top navigation bar styles.
    ============================================================= */
 
 .navbar {
+  background: #fff;
+  border-bottom: 1px solid var(--gray-200);
   height: var(--navbar-height);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  background: #fff;
-  border-bottom: 1px solid var(--gray-200);
+  padding: 0 1.5rem;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
 }
+
+/* Hamburger — shown on mobile only */
+.navbar-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--gray-700);
+  font-size: 1.3rem;
+  padding: 0.4rem;
+  border-radius: 8px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.navbar-hamburger:hover { background: var(--gray-100); }
+
 .navbar-title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--gray-900);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  margin-left: auto;
+  flex-shrink: 0;
 }
-.navbar-role {
-  font-size: 0.72rem;
-  font-weight: 600;
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 0.2rem 0.65rem;
-  border-radius: 100px;
-}
-.navbar-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--gray-700);
-}
+
 .navbar-avatar {
-  width: 34px;
-  height: 34px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   background: var(--primary-light);
   color: var(--primary);
   font-weight: 700;
   font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
   flex-shrink: 0;
 }
-.navbar-avatar-img {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--primary-light);
-  flex-shrink: 0;
+
+.navbar-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sidebar overlay on mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+  animation: fadeIn 0.2s ease;
+}
+.sidebar-overlay.show { display: block; }
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 1rem; }
+  .navbar-hamburger { display: flex; align-items: center; justify-content: center; }
+  .navbar-name { display: none; }
+}
+
+@media (max-width: 480px) {
+  .navbar { padding: 0 0.75rem; gap: 0.65rem; }
+  .navbar-title { font-size: 0.9rem; }
 }

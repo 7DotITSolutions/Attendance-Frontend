@@ -56,11 +56,13 @@ const Dashboard = () => {
     <div className="dashboard">
       {/* KPI cards */}
       <div className="grid-4" style={{ marginBottom: "1.5rem" }}>
-        <StatCard label="Active Students" value={students.length}   icon="🎓" color="primary" />
-        <StatCard label="Active Batches"  value={activeBatches.length} icon="📚" color="info" />
-        <StatCard label="Coaches"         value={coaches.length}    icon="👨‍🏫" color="success" />
-        <StatCard label="Fee Collected"   value={`₹${(fee.totalCollected || 0).toLocaleString("en-IN")}`} icon="💰" color="warning"
-          subtitle={`${currentMonth}`} />
+        <StatCard label="Active Students" value={students.length}    />
+        <StatCard label="Active Batches"  value={activeBatches.length}  />
+        <StatCard label="Coaches"         value={coaches.length}     />
+        <StatCard 
+  label={`Fee Collected (${currentMonth})`}
+  value={`₹${(fee.totalCollected || 0).toLocaleString("en-IN")}`}
+/>
       </div>
 
       {/* Charts row */}

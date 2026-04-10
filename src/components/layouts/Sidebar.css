@@ -148,27 +148,19 @@
 .sb-hamburger {
   display: none;
   position: fixed;
-  top: .5rem;
-  left: .5rem;
+  top: 1rem;
+  left: 1rem;
   z-index: 200;
-  background: #fff;
-  color: #1e1b4b;
-  border: none;
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-/* when sidebar is open */
-.sb-hamburger.open {
   background: #1e1b4b;
   color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 40px; height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 768px) {
@@ -176,7 +168,7 @@
   .sidebar {
     position: fixed;
     left: -100%;
-    padding-top: 3rem;
+    top: 0;
     width: 240px;
     height: 100vh;
     z-index: 150;

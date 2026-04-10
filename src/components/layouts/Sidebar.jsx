@@ -150,8 +150,8 @@ const Sidebar = () => {
     <>
       <div className={`sidebar ${open ? "open" : ""}`}>
         <div className="sb-brand">
-          <div className="sb-brand-name">AttendancePro</div>
-          <div className="sb-brand-sub">Management System</div>
+          <div className="sb-brand-name">Tick</div>
+          <div className="sb-brand-sub">Your Management Mate</div>
         </div>
 
         {/* Admin nav */}

@@ -28,7 +28,7 @@ const Navbar = () => {
 
   const title = Object.entries(PAGE_TITLES).find(
     ([key]) => pathname === key || pathname.startsWith(key + "/")
-  )?.[1] || "Attendance Pro";
+  )?.[1] || "Tick";
 
   const roleLabel =
     user?.role === "admin+coach" ? "Owner & Coach" :

@@ -1,17 +1,15 @@
 // =============================================================
 // FILE: src/components/layouts/Sidebar.jsx
-// PURPOSE: Left navigation sidebar. Based on your attached file
-//          with mobile hamburger support already added.
-//          Added: WhatsApp Fee Reminder button that opens a
-//          modal to pick batch and send reminders. Works for
-//          both admin and coach.
+// PURPOSE: Left sidebar nav. Receives onClose prop from App.jsx
+//          so tapping a nav link on mobile closes the sidebar.
+//          WhatsApp reminder button included for all roles.
 // =============================================================
 
-import { useState } from "react";
-import { NavLink }  from "react-router-dom";
-import axios        from "axios";
-import { toast }    from "react-toastify";
-import { useAuth }  from "../../context/AuthContext";
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 import "./Sidebar.css";
 
 const BASE = import.meta.env.VITE_BASE_URL;
@@ -42,30 +40,30 @@ const COACH_NAV = [
 ];
 
 const NavItem = ({ to, label, icon, onClick }) => (
-  <NavLink to={to}
+  <NavLink
+    to={to}
     className={({ isActive }) => `sb-link ${isActive ? "active" : ""}`}
-    onClick={onClick}>
+    onClick={onClick}
+  >
     <SVG d={icon} />
     <span>{label}</span>
   </NavLink>
 );
 
 // ── WhatsApp Reminder Modal ───────────────────────────────
-const WhatsAppReminderModal = ({ onClose }) => {
-  const [batches,   setBatches]   = useState([]);
-  const [batchId,   setBatchId]   = useState("");
-  const [sending,   setSending]   = useState(false);
-  const [loaded,    setLoaded]    = useState(false);
+const WAModal = ({ onClose }) => {
+  const [batches, setBatches] = useState([]);
+  const [batchId, setBatchId] = useState("");
+  const [sending, setSending] = useState(false);
 
-  // Load batches on mount
-  useState(() => {
+  useEffect(() => {
     axios.get(`${BASE}/whatsapp/batches`, { headers: h() })
-      .then((r) => { setBatches(r.data.batches || []); setLoaded(true); })
+      .then((r) => setBatches(r.data.batches || []))
       .catch(() => toast.error("Failed to load batches"));
   }, []);
 
   const send = async () => {
-    if (!batchId) { toast.warning("Please select a batch"); return; }
+    if (!batchId) { toast.warning("Select a batch first"); return; }
     setSending(true);
     try {
       const res = await axios.post(
@@ -76,59 +74,39 @@ const WhatsAppReminderModal = ({ onClose }) => {
       toast.success(res.data.message);
       onClose();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to send reminders");
-    } finally {
-      setSending(false);
-    }
+      toast.error(err.response?.data?.message || "Failed to send");
+    } finally { setSending(false); }
   };
 
   return (
-    <div className="wa-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="wa-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="wa-modal">
         <div className="wa-modal-header">
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontSize: "1.2rem" }}>📱</span>
-            <h3 className="wa-modal-title">WhatsApp Fee Reminder</h3>
+            <span>📱</span>
+            <h3 className="wa-modal-title">Fee Reminder</h3>
           </div>
           <button className="wa-close" onClick={onClose}>✕</button>
         </div>
-
         <div className="wa-modal-body">
-          <p className="wa-desc">
-            Sends each student's parent a WhatsApp message with:
-          </p>
-          <ul className="wa-features">
-            <li>📊 Last month's attendance summary</li>
-            <li>💰 This month's fee amount</li>
-            <li>🏫 Your institution name</li>
-          </ul>
-
-          <div className="form-group" style={{ marginTop: "1rem" }}>
-            <label className="form-label">Select batch <span className="req">*</span></label>
-            <select className="form-select" value={batchId}
-              onChange={(e) => setBatchId(e.target.value)}>
-              <option value="">Choose a batch...</option>
+          <p className="wa-desc">Sends each parent a WhatsApp with last month's attendance + this month's fee.</p>
+          <div className="form-group" style={{ marginTop: "0.875rem" }}>
+            <label className="form-label">Select batch</label>
+            <select className="form-select" value={batchId} onChange={(e) => setBatchId(e.target.value)}>
+              <option value="">Choose batch...</option>
               {batches.map((b) => (
-                <option key={b._id} value={b._id}>
-                  {b.batchName} {b.timing ? `— ${b.timing}` : ""}
-                </option>
+                <option key={b._id} value={b._id}>{b.batchName}{b.timing ? ` — ${b.timing}` : ""}</option>
               ))}
             </select>
           </div>
-
           <div className="wa-note">
-            <strong>💡 Note:</strong> Messages are sent to the phone number on record.
-            Students without a phone number are skipped.
-            In development mode, messages are only logged to console.
+            💡 Students without a phone number are skipped. In dev mode, messages are logged to console only.
           </div>
         </div>
-
         <div className="wa-modal-footer">
-          <button className="btn btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn btn-outline btn-sm" onClick={onClose}>Cancel</button>
           <button className="btn wa-send-btn" onClick={send} disabled={sending || !batchId}>
-            {sending
-              ? "Sending..."
-              : `📱 Send Reminders${batchId ? "" : " (select batch)"}`}
+            {sending ? "Sending..." : "📱 Send Reminders"}
           </button>
         </div>
       </div>
@@ -137,78 +115,76 @@ const WhatsAppReminderModal = ({ onClose }) => {
 };
 
 // ── Main Sidebar ──────────────────────────────────────────
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const { user, isAdmin, isCoach, isAdminAndCoach, logout } = useAuth();
-  const [open,      setOpen]      = useState(false);
-  const [waOpen,    setWaOpen]    = useState(false);
+  const [waOpen, setWaOpen] = useState(false);
 
-  const handleNavClick = () => {
-    if (window.innerWidth < 768) setOpen(false);
+  const handleNav = () => {
+    onClose?.();
   };
 
   return (
     <>
-      <div className={`sidebar ${open ? "open" : ""}`}>
+      <div className="sidebar">
         <div className="sb-brand">
-          <div className="sb-brand-name">Tick</div>
-          <div className="sb-brand-sub">Your Management Mate</div>
+          <div className="sb-brand-icon">📋</div>
+          <div>
+            <div className="sb-brand-name">AttendancePro</div>
+            <div className="sb-brand-sub">Management System</div>
+          </div>
         </div>
 
-        {/* Admin nav */}
-        {(isAdmin || isAdminAndCoach) && (
-          <div className="sb-section">
-            <p className="sb-section-label">
-              {isAdminAndCoach ? "Owner (Admin + Coach)" : "Admin"}
-            </p>
-            {ADMIN_NAV.map((n) => (
-              <NavItem key={n.to} {...n} onClick={handleNavClick} />
-            ))}
-          </div>
-        )}
+        <div className="sb-scroll">
+          {/* Admin nav */}
+          {(isAdmin || isAdminAndCoach) && (
+            <div className="sb-section">
+              <p className="sb-section-label">
+                {isAdminAndCoach ? "Owner + Coach" : "Admin"}
+              </p>
+              {ADMIN_NAV.map((n) => (
+                <NavItem key={n.to} {...n} onClick={handleNav} />
+              ))}
+            </div>
+          )}
 
-        {/* Coach-only nav */}
-        {isCoach && !isAdminAndCoach && !isAdmin && (
-          <div className="sb-section">
-            <p className="sb-section-label">Coach</p>
-            {COACH_NAV.map((n) => (
-              <NavItem key={n.to} {...n} onClick={handleNavClick} />
-            ))}
-          </div>
-        )}
+          {/* Coach-only nav */}
+          {isCoach && !isAdminAndCoach && !isAdmin && (
+            <div className="sb-section">
+              <p className="sb-section-label">Coach</p>
+              {COACH_NAV.map((n) => (
+                <NavItem key={n.to} {...n} onClick={handleNav} />
+              ))}
+            </div>
+          )}
 
-        {/* ── WhatsApp Reminder button (admin + coach both) ── */}
-        <div className="sb-section" style={{ marginTop: "auto", paddingTop: "0.5rem" }}>
-          <div className="sb-divider" />
-          <button className="sb-wa-btn" onClick={() => { setWaOpen(true); handleNavClick(); }}>
-            <span style={{ fontSize: "1rem" }}>📱</span>
-            <span>Fee Reminder</span>
-            <span className="sb-wa-badge">WA</span>
-          </button>
+          {/* WhatsApp reminder */}
+          <div className="sb-section">
+            <div className="sb-divider" />
+            <button className="sb-wa-btn" onClick={() => { setWaOpen(true); handleNav(); }}>
+              <span>📱</span>
+              <span>Fee Reminder</span>
+              <span className="sb-wa-badge">WA</span>
+            </button>
+          </div>
         </div>
 
         {/* Bottom user + logout */}
         <div className="sb-bottom">
           <div className="sb-user">
             <div className="sb-avatar">{user?.name?.[0]?.toUpperCase() || "U"}</div>
-            <div>
+            <div className="sb-user-info">
               <div className="sb-user-name">{user?.name}</div>
               <div className="sb-user-role">{user?.role}</div>
             </div>
           </div>
           <button className="sb-logout" onClick={logout}>
             <SVG d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" size={16} />
-            Logout
+            <span className="sb-logout-label">Logout</span>
           </button>
         </div>
       </div>
 
-      {/* Mobile hamburger */}
-      <button className="sb-hamburger" onClick={() => setOpen((prev) => !prev)}>
-        &#9776;
-      </button>
-
-      {/* WhatsApp Modal */}
-      {waOpen && <WhatsAppReminderModal onClose={() => setWaOpen(false)} />}
+      {waOpen && <WAModal onClose={() => setWaOpen(false)} />}
     </>
   );
 };

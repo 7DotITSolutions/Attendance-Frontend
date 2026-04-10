@@ -4,7 +4,7 @@
 //          value and optional subtitle. Color variants:
 //          primary, success, warning, danger, info.
 // =============================================================
-
+import "./StatCard.css";
 const StatCard = ({ label, value, icon, subtitle, color = "primary" }) => {
   const colors = {
     primary: { bg: "#ede9fe", text: "#5b21b6" },

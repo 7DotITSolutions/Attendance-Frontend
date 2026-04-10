@@ -1,7 +1,5 @@
 /* =============================================================
    FILE: src/components/layouts/Sidebar.css
-   PURPOSE: Sidebar styles including mobile hamburger,
-            WhatsApp reminder button and modal.
    ============================================================= */
 
 .sidebar {
@@ -9,134 +7,144 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* ── Brand ───────────────────────────────────────────────── */
 .sb-brand {
-  padding: 1.25rem 1.25rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1rem 1rem 0.875rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
 }
+.sb-brand-icon { font-size: 1.4rem; flex-shrink: 0; }
 .sb-brand-name {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 .sb-brand-sub {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.35);
-  margin-top: 0.1rem;
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.3);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  margin-top: 0.05rem;
 }
 
-/* ── Nav section ─────────────────────────────────────────── */
-.sb-section        { padding: 0.75rem 0.65rem 0.35rem; }
-.sb-section-label  {
-  font-size: 0.62rem;
+/* ── Scroll area ─────────────────────────────────────────── */
+.sb-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 0.5rem;
+}
+.sb-scroll::-webkit-scrollbar { width: 3px; }
+.sb-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+/* ── Section ─────────────────────────────────────────────── */
+.sb-section       { padding: 0.65rem 0.625rem 0.25rem; }
+.sb-section-label {
+  font-size: 0.58rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.25);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0 0.5rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
 }
-.sb-divider {
-  height: 1px;
-  background: rgba(255,255,255,0.07);
-  margin: 0.35rem 0 0.5rem;
-}
+.sb-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0.25rem 0 0.5rem; }
 
 /* ── Nav links ───────────────────────────────────────────── */
 .sb-link {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.58rem 0.75rem;
+  gap: 0.6rem;
+  padding: 0.54rem 0.75rem;
   border-radius: 8px;
-  color: rgba(255,255,255,0.55);
-  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.15s;
-  margin-bottom: 0.08rem;
+  margin-bottom: 0.06rem;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.sb-link:hover  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
-.sb-link.active { background: rgba(124,58,237,0.35);  color: #fff; }
+.sb-link:hover  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
+.sb-link.active { background: rgba(124,58,237,0.32); color: #fff; }
 .sb-link.active svg { color: #a78bfa; }
 
-/* ── WhatsApp reminder button ────────────────────────────── */
+/* ── WhatsApp button ─────────────────────────────────────── */
 .sb-wa-btn {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.6rem 0.75rem;
+  gap: 0.6rem;
+  padding: 0.54rem 0.75rem;
   border-radius: 8px;
-  border: 1px solid rgba(37,211,102,0.3);
+  border: 1px solid rgba(37,211,102,0.28);
   background: rgba(37,211,102,0.1);
   color: #25d366;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s;
   font-family: inherit;
-  margin-bottom: 0.35rem;
+  -webkit-tap-highlight-color: transparent;
 }
-.sb-wa-btn:hover {
-  background: rgba(37,211,102,0.2);
-  border-color: rgba(37,211,102,0.5);
-}
+.sb-wa-btn:hover { background: rgba(37,211,102,0.18); border-color: rgba(37,211,102,0.45); }
 .sb-wa-badge {
   margin-left: auto;
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   background: #25d366;
   color: #fff;
-  padding: 0.1rem 0.35rem;
+  padding: 0.08rem 0.32rem;
   border-radius: 4px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
-/* ── Bottom section ──────────────────────────────────────── */
+/* ── Bottom ──────────────────────────────────────────────── */
 .sb-bottom {
-  padding: 0.75rem;
+  padding: 0.65rem;
   border-top: 1px solid rgba(255,255,255,0.08);
   flex-shrink: 0;
 }
 .sb-user {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.5rem 0.5rem 0.6rem;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem 0.5rem;
 }
 .sb-avatar {
-  width: 32px; height: 32px;
+  width: 30px; height: 30px;
   border-radius: 50%;
   background: rgba(124,58,237,0.4);
   color: #c4b5fd;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.sb-user-name { font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.85); line-height: 1.2; }
-.sb-user-role { font-size: 0.66rem; color: rgba(255,255,255,0.32); text-transform: capitalize; }
+.sb-user-info { min-width: 0; }
+.sb-user-name { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.82); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-user-role { font-size: 0.62rem; color: rgba(255,255,255,0.28); text-transform: capitalize; margin-top: 0.05rem; }
 
 .sb-logout {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.55rem;
+  padding: 0.48rem 0.75rem;
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: rgba(255,255,255,0.38);
-  font-size: 0.82rem;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -144,144 +152,49 @@
 }
 .sb-logout:hover { background: rgba(220,38,38,0.15); color: #fca5a5; }
 
-/* ── Mobile hamburger ────────────────────────────────────── */
-.sb-hamburger {
-  display: none;
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 200;
-  background: #1e1b4b;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  width: 40px; height: 40px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-@media (max-width: 768px) {
-  .sb-hamburger { display: flex; }
-  .sidebar {
-    position: fixed;
-    left: -100%;
-    top: 0;
-    width: 240px;
-    height: 100vh;
-    z-index: 150;
-    transition: left 0.25s ease;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-  }
-  .sidebar.open { left: 0; }
-}
-
-/* ── WhatsApp Modal ──────────────────────────────────────── */
-.wa-modal-overlay {
+/* ── WA Modal ────────────────────────────────────────────── */
+.wa-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 600;
   padding: 1rem;
   animation: fadeIn 0.15s ease;
 }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
 .wa-modal {
   background: #fff;
   border-radius: 16px;
   width: 100%;
-  max-width: 440px;
+  max-width: 420px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   animation: slideUp 0.2s ease;
   overflow: hidden;
 }
-@keyframes slideUp { from { transform: translateY(16px); opacity:0; } to { transform:none; opacity:1; } }
-
 .wa-modal-header {
-  padding: 1.1rem 1.25rem;
-  border-bottom: 1px solid #f3f4f6;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--gray-100);
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #f0fdf4;
 }
-.wa-modal-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #166534;
-}
-.wa-close {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0.25rem;
-  border-radius: 6px;
-  line-height: 1;
-}
-.wa-close:hover { background: #f3f4f6; color: #374151; }
+.wa-modal-title { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: #166534; }
+.wa-close { background: none; border: none; color: var(--gray-400); cursor: pointer; font-size: 1rem; padding: 0.2rem; border-radius: 6px; line-height: 1; }
+.wa-close:hover { background: var(--gray-100); }
+.wa-modal-body   { padding: 1.1rem; }
+.wa-modal-footer { padding: 0.875rem 1.1rem; border-top: 1px solid var(--gray-100); display: flex; gap: 0.65rem; justify-content: flex-end; }
+.wa-desc { font-size: 0.82rem; color: var(--gray-600); line-height: 1.5; }
+.wa-note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.75rem; color: #92400e; margin-top: 0.875rem; line-height: 1.5; }
+.wa-send-btn { background: #25d366; color: #fff; border: none; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s; font-family: inherit; }
+.wa-send-btn:hover:not(:disabled) { background: #1da851; }
+.wa-send-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-.wa-modal-body { padding: 1.25rem; }
-
-.wa-desc {
-  font-size: 0.875rem;
-  color: #374151;
-  margin-bottom: 0.5rem;
+/* ── Mobile: sidebar slides in from left ─────────────────── */
+@media (max-width: 768px) {
+  .wa-overlay { padding: 0; align-items: flex-end; }
+  .wa-modal   { border-radius: 16px 16px 0 0; max-width: 100%; }
+  .sb-logout-label { display: inline; }
 }
-.wa-features {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.wa-features li {
-  font-size: 0.82rem;
-  color: #6b7280;
-  padding: 0.2rem 0;
-}
-
-.wa-note {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: 8px;
-  padding: 0.65rem 0.875rem;
-  font-size: 0.78rem;
-  color: #92400e;
-  margin-top: 1rem;
-  line-height: 1.5;
-}
-
-.wa-modal-footer {
-  padding: 1rem 1.25rem;
-  border-top: 1px solid #f3f4f6;
-  display: flex;
-  gap: 0.75rem;
-  justify-content: flex-end;
-}
-
-.wa-send-btn {
-  background: #25d366;
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1.25rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s;
-  font-family: inherit;
-}
-.wa-send-btn:hover:not(:disabled) {
-  background: #1da851;
-  box-shadow: 0 4px 12px rgba(37,211,102,0.35);
-}
-.wa-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }

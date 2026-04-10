@@ -203,9 +203,12 @@ const Sidebar = () => {
       </div>
 
       {/* Mobile hamburger */}
-      <button className="sb-hamburger" onClick={() => setOpen((prev) => !prev)}>
-        &#9776;
-      </button>
+      <button
+  className={`sb-hamburger ${open ? "open" : ""}`}
+  onClick={() => setOpen((prev) => !prev)}
+>
+  {open ? "✕" : "☰"}
+</button>
 
       {/* WhatsApp Modal */}
       {waOpen && <WhatsAppReminderModal onClose={() => setWaOpen(false)} />}

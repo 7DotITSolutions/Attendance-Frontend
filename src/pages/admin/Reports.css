@@ -2,28 +2,124 @@
    FILE: src/pages/admin/Reports.css
    ============================================================= */
 
-.report-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--gray-100); margin-bottom: 1rem; overflow-x: auto; }
+.report-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--gray-100);
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
 .report-tab {
-  padding: 0.6rem 1rem;
-  border: none; background: transparent;
-  font-size: 0.85rem; font-weight: 500; color: var(--gray-500);
-  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
-  white-space: nowrap; transition: all 0.15s; font-family: inherit;
+  padding: 0.65rem 1.25rem;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: all 0.15s;
+  font-family: inherit;
 }
 .report-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
 .report-tab:hover  { color: var(--gray-700); }
 
-.report-filters { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
-
-.att-pct-bar {
-  position: relative; width: 72px; height: 18px;
-  background: var(--gray-100); border-radius: 100px; overflow: hidden;
-  display: inline-flex; align-items: center;
+.report-filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
-.att-pct-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 100px; transition: width 0.3s; }
-.att-pct-text { position: relative; font-size: 0.65rem; font-weight: 700; color: #fff; z-index: 1; padding-left: 0.35rem; mix-blend-mode: difference; }
+
+/* Attendance % bar */
+.att-pct-bar {
+  position: relative;
+  width: 80px;
+  height: 20px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+}
+.att-pct-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  border-radius: 100px;
+  transition: width 0.3s;
+}
+.att-pct-text {
+  position: relative;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  z-index: 1;
+  padding-left: 0.4rem;
+  mix-blend-mode: difference;
+}
+
+/* Defaulters header */
+.defaulters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: #fef2f2;
+  border-radius: 12px;
+  border: 1px solid #fca5a5;
+  flex-wrap: wrap;
+}
+.defaulters-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.15rem;
+}
+.defaulters-count {
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 100px;
+  min-width: 20px;
+  text-align: center;
+}
+.defaulters-sub { font-size: 0.78rem; color: var(--gray-500); margin: 0; }
+
+/* WhatsApp button — shared between Reports and Fees */
+.btn-wa {
+  background: #25d366;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+}
+.btn-wa:hover:not(:disabled) {
+  background: #1da851;
+  box-shadow: 0 4px 12px rgba(37,211,102,0.3);
+}
+.btn-wa:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-wa.btn-sm   { padding: 0.35rem 0.75rem; font-size: 0.78rem; border-radius: 7px; }
 
 @media (max-width: 640px) {
-  .report-filters { flex-direction: column; }
+  .report-filters    { flex-direction: column; }
   .report-filters .form-select { width: 100%; }
+  .defaulters-header { flex-direction: column; align-items: flex-start; }
 }

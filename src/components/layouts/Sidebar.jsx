@@ -129,8 +129,8 @@ const Sidebar = ({ onClose }) => {
         <div className="sb-brand">
           <div className="sb-brand-icon">📋</div>
           <div>
-            <div className="sb-brand-name">AttendancePro</div>
-            <div className="sb-brand-sub">Management System</div>
+            <div className="sb-brand-name">Tick</div>
+            <div className="sb-brand-sub">Your Management Mate</div>
           </div>
         </div>
 
@@ -161,9 +161,9 @@ const Sidebar = ({ onClose }) => {
           <div className="sb-section">
             <div className="sb-divider" />
             <button className="sb-wa-btn" onClick={() => { setWaOpen(true); handleNav(); }}>
-              <span>📱</span>
+              {/* <span>💵</span> */}
               <span>Fee Reminder</span>
-              <span className="sb-wa-badge">WA</span>
+              {/* <span className="sb-wa-badge">WA</span> */}
             </button>
           </div>
         </div>

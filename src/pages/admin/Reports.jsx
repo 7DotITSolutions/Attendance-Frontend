@@ -238,7 +238,7 @@ const Reports = () => {
                     onClick={remindAll}
                     disabled={remindingAll || !data.length}
                   >
-                    {remindingAll ? "Sending..." : `📱 Remind All (${data.length})`}
+                    {remindingAll ? "Sending..." : ` Remind All (${data.length})`}
                   </button>
                 </div>
 

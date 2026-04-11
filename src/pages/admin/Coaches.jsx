@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import Modal from "../../components/ui/Modal";
 import Badge from "../../components/ui/Badge";
 import Spinner from "../../components/ui/Spinner";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./Coaches.css";
 
 const BASE = import.meta.env.VITE_BASE_URL;
@@ -162,7 +163,7 @@ const Coaches = () => {
               {...register("password", { required: "Password is required", minLength: { value: 8, message: "Min 8 characters" } })} />
             <button type="button" onClick={() => setShowPass(!showPass)}
               style={{ position: "absolute", right: "0.65rem", background: "none", border: "none", cursor: "pointer", fontSize: "1rem" }}>
-              {showPass ? "🙈" : "👁️"}
+              {showPass ? <FiEye /> : <FiEyeOff />}
             </button>
           </div>
           {errors.password && <p className="form-error">{errors.password.message}</p>}

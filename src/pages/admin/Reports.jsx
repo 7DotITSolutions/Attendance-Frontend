@@ -111,22 +111,22 @@ const Reports = () => {
   };
 
   const remindAll = async () => {
-    if (!window.confirm(`Send reminder to all defaulters for ${month}?`)) return;
+  if (!window.confirm(`Send reminder to all defaulters for ${month}?`)) return;
 
-    setRemindingAll(true);
-    try {
-      const res = await axios.post(
-        `${BASE}/whatsapp/fee-reminder`,
-        { batchId, month },
-        { headers: h() }
-      );
-      toast.success(res.data.message);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to send reminders");
-    } finally {
-      setRemindingAll(false);
-    }
-  };
+  setRemindingAll(true);
+  try {
+    const res = await axios.post(
+      `${BASE}/whatsapp/fee-reminder-all-defaulters`,
+      { batchId, month },
+      { headers: h() }
+    );
+    toast.success(res.data.message);
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to send reminders");
+  } finally {
+    setRemindingAll(false);
+  }
+};
 
   const yearOptions = [new Date().getFullYear(), new Date().getFullYear() - 1];
 

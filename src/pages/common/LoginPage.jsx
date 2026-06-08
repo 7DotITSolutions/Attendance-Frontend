@@ -70,9 +70,16 @@ const LoginPage = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="auth-logo">📋</div>
-          <h1 className="auth-title">Tick</h1>
-          <p className="auth-subtitle">Log in to your account</p>
+          {/* chmage image to logo */}
+          <div className="auth-logo">
+            <img
+              src="/logo.png"
+              alt="Vought 7 Logo"
+              className="auth-logo-img"
+            />
+          </div>
+          {/* <h1 className="auth-title">Vought 7</h1> */}
+          <p className="auth-subtitle">Welcome back !</p>
         </div>
 
         <form
@@ -165,7 +172,7 @@ const LoginPage = () => {
               className="auth-link"
               onClick={() => navigate("/register")}
             >
-              Still not registered? Create an account →
+              New Here? Create an account →
             </button>
           </div>
         </form>

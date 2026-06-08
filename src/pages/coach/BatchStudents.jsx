@@ -249,11 +249,11 @@ const BatchStudents = () => {
       <div className="bs-actions">
         <button className="btn btn-primary"
           onClick={() => navigate(`/coach/attendance?batchId=${batchId}`)}>
-          📋 Mark Attendance
+          Mark Attendance
         </button>
         <button className="btn btn-secondary"
           onClick={() => navigate(`/coach/fees?batchId=${batchId}`)}>
-          💰 Collect Fees
+          Collect Fees
         </button>
       </div>
 

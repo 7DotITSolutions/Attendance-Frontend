@@ -1,0 +1,487 @@
+/* =============================================================
+   FILE: src/pages/common/RegisterPage.css
+   PURPOSE: Mirrors the React Native RegisterScreen design —
+            indigo #6366f1 primary, card shadow, role dropdown
+            with tooltip, password strength bar.
+   ============================================================= */
+
+/* ── Variables (matching app theme.js) ──────────────────── */
+:root {
+  --rp-primary:       #1e1b4b;
+  --rp-primary-light: #ede9fe;
+  --rp-success:       #10b981;
+  --rp-warning:       #f59e0b;
+  --rp-danger:        #ef4444;
+  --rp-info:          #3b82f6;
+  --rp-gray100:       #f3f4f6;
+  --rp-gray300:       #d1d5db;
+  --rp-gray400:       #9ca3af;
+  --rp-gray500:       #6b7280;
+  --rp-gray800:       #1f2937;
+  --rp-border:        #e5e7eb;
+  --rp-white:         #ffffff;
+  --rp-dark:          #1e1b4b;
+}
+
+/* ── Page ────────────────────────────────────────────────── */
+.rp-page {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.rp-scroll {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 24px 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.rp-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rp-logo {
+  width: 120px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+}
+
+.rp-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e1b4b;
+  margin-bottom: 0;
+}
+.rp-subtitle {
+  font-size: 14px;
+  color: var(--rp-gray500);
+}
+/* ── Card ────────────────────────────────────────────────── */
+.rp-card {
+  background: var(--rp-white);
+  border-radius: 24px;
+  padding: 24px;
+}
+
+/* ── Field ───────────────────────────────────────────────── */
+.rp-field {
+  margin-bottom: 16px;
+}
+
+.rp-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rp-primary);
+  margin-bottom: 6px;
+}
+
+.rp-req {
+  color: var(--rp-danger);
+}
+
+/* ── Input ───────────────────────────────────────────────── */
+.rp-input {
+  width: 100%;
+  border: 1.5px solid var(--rp-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--rp-gray800);
+  background: var(--rp-white);
+  outline: none;
+  transition: border-color 0.18s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.rp-input::placeholder {
+  color: var(--rp-gray400);
+  font-weight: 400;
+}
+
+.rp-input:focus {
+  border-color: var(--rp-primary);
+}
+
+.rp-input--error {
+  border-color: var(--rp-danger);
+}
+
+.rp-err {
+  font-size: 12px;
+  color: var(--rp-danger);
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+/* ── Role dropdown wrapper ───────────────────────────────── */
+.rp-dd-wrap {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Trigger button ──────────────────────────────────────── */
+.rp-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--rp-border);
+  border-radius: 12px;
+  padding: 13px 14px;
+  background: var(--rp-white);
+  cursor: pointer;
+  transition: border-color 0.18s;
+  font-family: inherit;
+}
+
+.rp-trigger:hover {
+  border-color: var(--rp-primary);
+}
+
+.rp-trigger--open {
+  border-color: var(--rp-primary);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.rp-trigger--error {
+  border-color: var(--rp-danger);
+}
+
+.rp-trigger-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--rp-gray800);
+}
+
+.rp-trigger-placeholder {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--rp-gray300);
+}
+
+.rp-chevron {
+  color: var(--rp-gray400);
+  flex-shrink: 0;
+}
+
+/* ── Dropdown panel ──────────────────────────────────────── */
+.rp-dd-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--rp-white);
+  border: 1.5px solid var(--rp-primary);
+  border-top: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  overflow: hidden;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.rp-dd-sep {
+  height: 1px;
+  background: var(--rp-border);
+  margin: 0 14px;
+}
+
+/* ── Option row ──────────────────────────────────────────── */
+.rp-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.rp-option:hover {
+  background: #faf8ff;
+}
+
+.rp-option--active {
+  background: #faf8ff;
+}
+
+.rp-opt-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--rp-gray100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.rp-opt-icon--active {
+  background: var(--rp-primary);
+}
+
+.rp-opt-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rp-opt-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--rp-gray800);
+}
+
+.rp-opt-title--active {
+  color: var(--rp-primary);
+}
+
+.rp-opt-sub {
+  font-size: 12px;
+  color: var(--rp-gray400);
+}
+
+/* ── Info button ─────────────────────────────────────────── */
+.rp-info-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--rp-gray100);
+  border: 1px solid var(--rp-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+  padding: 0;
+}
+
+.rp-info-btn--active {
+  background: var(--rp-primary-light);
+  border-color: var(--rp-primary);
+}
+
+.rp-info-i {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--rp-gray400);
+  font-style: normal;
+  line-height: 1;
+}
+
+.rp-info-i--active {
+  color: var(--rp-primary);
+}
+
+/* ── Tooltip ─────────────────────────────────────────────── */
+.rp-tooltip {
+  background: #1e1b4b;
+  margin: 0 14px 12px;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.rp-tt-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.rp-tt-row {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.rp-tt-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #818cf8;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.rp-tt-text {
+  font-size: 11px;
+  color: #c4b5fd;
+  line-height: 16px;
+  flex: 1;
+}
+
+/* ── Password wrap ───────────────────────────────────────── */
+.rp-pw-wrap {
+  position: relative;
+}
+
+.rp-pw-wrap .rp-input {
+  padding-right: 44px;
+}
+
+.rp-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--rp-primary);
+  display: flex;
+  align-items: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.rp-eye:hover {
+  opacity: 0.75;
+}
+
+/* ── Strength bar ────────────────────────────────────────── */
+.rp-strength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.rp-strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.rp-sbar {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--rp-border);
+  transition: background-color 0.2s;
+}
+
+.rp-strength-label {
+  font-size: 11px;
+  font-weight: 600;
+  width: 44px;
+  text-align: right;
+}
+
+/* ── Submit button ───────────────────────────────────────── */
+.rp-submit {
+  width: 100%;
+  padding: 10px;
+  background: var(--rp-primary);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.18s, transform 0.1s;
+  font-family: inherit;
+}
+
+.rp-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.rp-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.rp-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ─────────────────────────────────────────────── */
+.rp-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: rp-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes rp-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.rp-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.rp-footer-text {
+  font-size: 13px;
+  color: var(--rp-gray500);
+}
+
+.rp-signin-link {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--rp-primary);
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.rp-signin-link:hover {
+  text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .rp-scroll {
+    padding: 28px 16px 40px;
+  }
+
+  .rp-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .rp-title {
+    font-size: 22px;
+  }
+
+  .rp-card {
+    padding: 20px 18px;
+    border-radius: 20px;
+  }
+
+  .rp-submit {
+    padding: 14px;
+    font-size: 15px;
+  }
+}

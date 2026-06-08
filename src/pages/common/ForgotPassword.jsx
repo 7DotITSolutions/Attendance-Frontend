@@ -53,8 +53,14 @@ const ForgotPassword = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="auth-logo">🔑</div>
-          <h1 className="auth-title">{step === 1 ? "Forgot Password" : "Reset Password"}</h1>
+          <div className="auth-logo">
+            <img
+              src="/logo.png"
+              alt="Vought 7 Logo"
+              className="auth-logo-img"
+            />
+          </div>
+          <h1 className="auth-title">{step === 1 ? "Forgot Password ?" : "Reset Password"}</h1>
           <p className="auth-subtitle">{step === 1 ? "Enter your email to receive an OTP" : `OTP sent to ${email}`}</p>
         </div>
 

@@ -92,15 +92,15 @@ const CoachDashboard = () => {
               <div className="coach-batch-actions">
                 <button className="btn btn-primary btn-sm"
                   onClick={() => navigate(`/coach/attendance?batchId=${b.batchId}`)}>
-                  📋 Mark Attendance
+                  Attendance
                 </button>
                 <button className="btn btn-outline btn-sm"
                   onClick={() => navigate(`/coach/fees?batchId=${b.batchId}`)}>
-                  💰 Collect Fees
+                  Collect Fees
                 </button>
                 <button className="btn btn-ghost btn-sm"
                   onClick={() => navigate(`/coach/batch/${b.batchId}`)}>
-                  👥 Students
+                  Students
                 </button>
               </div>
             </div>
